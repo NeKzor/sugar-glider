@@ -1,6 +1,8 @@
 [![Build Version](https://img.shields.io/badge/version-v1.0-brightgreen.svg)](https://github.com/NeKzor/sugar-glider/projects/1)
 
-![screenie](doc/screenie.png)
+**sugar-glider** is a Source Engine plugin for Portal 2 which connects to a Discord Rich Presence Client application.
+
+[![screenie](doc/screenie.png)](https://discordapp.com/developers/docs/rich-presence/how-to)
 
 ## Supported Systems
 
@@ -34,9 +36,9 @@ The order matters.
 
 ## Connection
 
-This plugin detects automatically your [board.iverb.me](https://board.iverb.me) profile by your logged in Steam account. Global rank will be fetch from [aggregated rankings](https://board.iverb.me). Level ranking will be fetched from current chamber.
+This plugin detects automatically your [board.iverb.me](https://board.iverb.me) profile by your logged-in Steam account. Global rank will be fetched from [aggregated rankings](https://board.iverb.me/aggregated/overall). Level ranking will be fetched from current chamber.
 
-It does not update the rankings frequently. Global rank will be determined once the plugin has loaded successfully. The ranking of a current chamber will be updated when the level changes.
+It does not update the rankings frequently. Global rank will be determined once the plugin has successfully loaded. The ranking of a current chamber will be updated when the level changes.
 
 ## Building
 
