@@ -2,6 +2,7 @@
 #include "Module.hpp"
 
 #include "Platform.hpp"
+#include "Variable.hpp"
 
 #include "SDK.hpp"
 
@@ -20,8 +21,10 @@
 #define MSG_SYMBOL "Msg"
 #define WARNING_SYMBOL "Warning"
 
-#define SGP_PRINT_COLOR Color(100, 192, 252) //247, 214, 68)
+#define SGP_PRINT_COLOR Color(100, 192, 252)
 #define SGP_PRINT_ACTIVE_COLOR Color(110, 247, 76)
+
+extern Variable developer;
 
 class Console : public Module {
 public:
@@ -45,6 +48,14 @@ public:
     void Print(const char* fmt, T... args)
     {
         this->ColorMsg(SGP_PRINT_COLOR, fmt, args...);
+    }
+
+    template <typename... T>
+    void Debug(const char* fmt, T... args)
+    {
+        if (developer.GetBool()) {
+            this->ColorMsg(SGP_PRINT_COLOR, fmt, args...);
+        }
     }
 
     template <typename... T>

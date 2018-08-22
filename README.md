@@ -17,11 +17,13 @@ The order matters.
 - Demo Player
 - Puzzle Maker
 - Main Menu
+- Developer Commentary
 - Challenge Mode
 - Cooperative
+- Workshop
 - Single Player
 - Extras
-- Workshop
+- Custom Map
 
 ### States
 
@@ -30,6 +32,7 @@ The order matters.
 - Mapping
 - Menuing
 - Routing
+- Listening
 - Grinding
 - Running
 - Playing

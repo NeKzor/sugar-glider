@@ -2,6 +2,8 @@
 
 #include "Memory.hpp"
 
+Variable developer;
+
 Console::Console()
     : Module()
     , Msg(nullptr)

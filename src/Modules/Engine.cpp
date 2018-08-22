@@ -19,15 +19,19 @@ Engine::Engine()
     , demoplayer(nullptr)
     , moviename(nullptr)
     , GetMaxClients(nullptr)
+    , IsInEditMode(nullptr)
+    , IsInCommentaryMode(nullptr)
     , IsPlayingBack(nullptr)
 {
 }
 bool Engine::Init()
 {
-    //console->Print("Hi\n");
+    //console->Debug("SGP: Hi\n");
     auto engine = Interface::Create(MODULE("engine"), "VEngineClient0", false);
     if (engine) {
         this->GetMaxClients = engine->Original<_GetMaxClients>(Offsets::GetMaxClients);
+        this->IsInEditMode = engine->Original<_IsInEditMode>(Offsets::IsInEditMode);
+        this->IsInCommentaryMode = engine->Original<_IsInCommentaryMode>(Offsets::IsInCommentaryMode);
 
         void* clPtr = nullptr;
         if (g_DiscordPlugin.game->IsPortal2Engine()) {
@@ -60,14 +64,18 @@ bool Engine::Init()
 
     sv_cheats = Variable("sv_cheats");
     sv_bonus_challenge = Variable("sv_bonus_challenge");
+    developer = Variable("developer");
 
     return this->hasLoaded = this->hoststate != nullptr
         && this->demoplayer != nullptr
         && this->moviename != nullptr
         && this->GetMaxClients != nullptr
+        && this->IsInEditMode != nullptr
+        && this->IsInCommentaryMode != nullptr
         && this->IsPlayingBack != nullptr
         && !!sv_cheats
-        && !!sv_bonus_challenge;
+        && !!sv_bonus_challenge
+        && !!developer;
 }
 void Engine::Shutdown()
 {

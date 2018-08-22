@@ -11,6 +11,8 @@ int m_pConCommandList;
 // CEngineClient
 int ClientCmd;
 int GetMaxClients;
+int IsInEditMode;
+int IsInCommentaryMode;
 int ServerCmdKeyValues;
 
 // ConVar

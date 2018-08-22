@@ -17,6 +17,12 @@ public:
     using _GetMaxClients = int (*)();
     _GetMaxClients GetMaxClients;
 
+    using _IsInEditMode = bool (*)();
+    _IsInEditMode IsInEditMode;
+
+    using _IsInCommentaryMode = bool (*)();
+    _IsInCommentaryMode IsInCommentaryMode;
+
     using _IsPlayingBack = bool(__funcc*)(void* thisptr);
     _IsPlayingBack IsPlayingBack;
 

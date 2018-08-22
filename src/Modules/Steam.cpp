@@ -14,6 +14,7 @@ Steam::Steam()
 }
 bool Steam::Init()
 {
+    // TODO: offsets
     auto libsteam_api = Memory::GetModuleHandleByName(MODULE("libsteam_api"));
     if (libsteam_api) {
         auto SteamClient = Memory::GetSymbolAddress<void* (*)()>(libsteam_api, "SteamClient");
@@ -25,7 +26,7 @@ bool Steam::Init()
             this->user = Memory::VMT<ISteamUser* (*)(void*, int, int, const char*)>(client, 5)(client, handle, pipe, "SteamUser019");
             if (this->user) {
                 auto id = this->user->GetSteamID();
-                console->Print("Hello %llu!\n", id.ConvertToUint64());
+                console->Debug("SGP: Hello %llu!\n", id.ConvertToUint64());
             }
         }
     }

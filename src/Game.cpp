@@ -12,7 +12,7 @@ bool Game::IsPortal2Engine()
 {
     return this->version == SourceGame::Portal2;
 }
-Game* Game::CreateGame()
+Game* Game::CreateNew()
 {
     if (Memory::GetProcessName() == Portal2::Process()) {
         return new Portal2();

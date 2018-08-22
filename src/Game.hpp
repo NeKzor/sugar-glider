@@ -16,5 +16,5 @@ public:
 
     bool IsPortal2Engine();
 
-    static Game* CreateGame();
+    static Game* CreateNew();
 };

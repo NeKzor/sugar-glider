@@ -4,18 +4,31 @@
 #define APP_ID "478256997314330634"
 #define STEAM_APP_ID "620"
 
+#define DETECT_CHANGE_S(prevState, curState)             \
+    if (std::strcmp(prevState, curState) != 0) {         \
+        std::strcpy(prevState, curState);                \
+        console->Debug(#prevState " = %s\n", prevState); \
+        change = true;                                   \
+    }
+#define DETECT_CHANGE_B(prevState, curState)             \
+    if (prevState != curState) {                         \
+        prevState = curState;                            \
+        console->Debug(#prevState " = %i\n", prevState); \
+        change = true;                                   \
+    }
+
 struct DiscordRichPresence;
 struct DiscordUser;
 
 struct DiscordAsset {
     char key[256];
     char text[256];
-    bool shouldShow;
+    bool isActive;
 
     DiscordAsset()
         : key("")
         , text("")
-        , shouldShow(false)
+        , isActive(false)
     {
     }
 };
@@ -29,8 +42,9 @@ private:
     bool isGrinding;
     bool isViewing;
     bool isRendering;
-    bool isMapping;
     bool isActive;
+    bool isMapping;
+    bool isListening;
     // Connection
     Portal2Boards::Client* iverb;
     char globalRank[32];
@@ -38,6 +52,10 @@ private:
     // Assets
     DiscordAsset large;
     DiscordAsset small;
+    // Cache
+    char details[256];
+    char state[256];
+    time_t timestamp;
 
 public:
     Discord();

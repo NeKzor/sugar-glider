@@ -11,6 +11,8 @@ extern int m_pConCommandList;
 // CEngineClient
 extern int ClientCmd;
 extern int GetMaxClients;
+extern int IsInEditMode;
+extern int IsInCommentaryMode;
 extern int ServerCmdKeyValues;
 
 // ConVar
