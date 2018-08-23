@@ -42,7 +42,7 @@ private:
     bool isGrinding;
     bool isViewing;
     bool isRendering;
-    bool isActive;
+    bool isMenuing;
     bool isMapping;
     bool isListening;
     // Connection

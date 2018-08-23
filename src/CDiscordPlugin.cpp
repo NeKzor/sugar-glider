@@ -33,12 +33,12 @@ bool CDiscordPlugin::Load(CreateInterfaceFn interfaceFactory, CreateInterfaceFn 
             this->modules->InitAll();
 
             if (engine->hasLoaded && steam->hasLoaded) {
-                this->plugin = new Plugin();
-                this->StartPluginThread();
-
                 this->discord = new Discord();
                 this->discord->Init();
                 this->StartMainThread();
+
+                this->plugin = new Plugin();
+                this->StartPluginThread();
 
                 console->PrintActive("Loaded sugar-glider plugin, Version %s (by NeKz)\n", this->Version());
                 return true;
@@ -61,9 +61,8 @@ void CDiscordPlugin::Unload()
 
     this->isRunning = false;
     if (this->mainThread.joinable())
-        mainThread.detach();
+        this->mainThread.detach();
 
-    SAFE_UNLOAD(this->discord);
     SAFE_UNLOAD(this->game);
     SAFE_UNLOAD(this->plugin);
     SAFE_UNLOAD(this->modules);
@@ -80,6 +79,7 @@ bool CDiscordPlugin::PluginFound()
     static Interface* s_ServerPlugin = Interface::Create(MODULE("engine"), "ISERVERPLUGINHELPERS0", false);
     if (!this->plugin->found && s_ServerPlugin) {
         auto m_Size = *reinterpret_cast<int*>((uintptr_t)s_ServerPlugin->ThisPtr() + CServerPlugin_m_Size);
+        //console->Debug("m_Size = %i\n", m_Size);
         if (m_Size > 0) {
             auto m_Plugins = *reinterpret_cast<uintptr_t*>((uintptr_t)s_ServerPlugin->ThisPtr() + CServerPlugin_m_Plugins);
             for (int i = 0; i < m_Size; i++) {
@@ -97,7 +97,7 @@ bool CDiscordPlugin::PluginFound()
 }
 void CDiscordPlugin::StartPluginThread()
 {
-    pluginThread = std::thread([this]() {
+    this->pluginThread = std::thread([this]() {
         GO_THE_FUCK_TO_SLEEP(1000);
         if (!this->PluginFound()) {
             console->DevWarning("SGP: Failed to find sugar-glider plugin in the plugin list!\n");
@@ -105,17 +105,19 @@ void CDiscordPlugin::StartPluginThread()
             this->plugin->ptr->m_bDisable = true;
         }
     });
-    pluginThread.detach();
+    this->pluginThread.detach();
 }
 // Main loop
 void CDiscordPlugin::StartMainThread()
 {
     this->isRunning = true;
-    mainThread = std::thread([this]() {
-        while (this->isRunning) {
+    this->mainThread = std::thread([this]() {
+        while (this->isRunning && engine->hoststate->m_currentState <= HOSTSTATES::HS_RUN) {
             this->discord->Update();
             GO_THE_FUCK_TO_SLEEP(333);
         }
+
+        SAFE_UNLOAD(this->discord);
     });
 }
 

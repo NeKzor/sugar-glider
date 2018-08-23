@@ -33,7 +33,7 @@ Discord::Discord()
     this->isGrinding = sv_bonus_challenge.GetBool();
     this->isViewing = engine->IsPlayingBack(engine->demoplayer);
     this->isRendering = engine->CL_IsRecordingMovie();
-    this->isActive = engine->hoststate->m_activeGame;
+    this->isMenuing = engine->IsInMenu();
     this->isMapping = engine->IsInEditMode();
     this->isListening = engine->IsInCommentaryMode();
     this->iverb = new Client("portal2-discord-plugin/1.0");
@@ -80,14 +80,14 @@ const char* Discord::GetDetails()
     if (this->isRendering || this->isViewing) {
         return "Demo Player";
     }
+    if (this->isMenuing) {
+        return "Main Menu";
+    }
     if (this->isMapping) {
         return "Hammer Editor";
     }
     if (std::strstr(this->level, "puzzlemaker/")) {
         return "Puzzle Maker";
-    }
-    if (!this->isActive) {
-        return "Main Menu";
     }
     if (this->isListening) {
         return "Developer Commentary";
@@ -122,11 +122,11 @@ const char* Discord::GetState()
     if (this->isViewing) {
         return "Viewing";
     }
+    if (this->isMenuing) {
+        return "Menuing";
+    }
     if (this->isMapping || std::strstr(this->level, "puzzlemaker/")) {
         return "Mapping";
-    }
-    if (!this->isActive) {
-        return "Menuing";
     }
     if (this->isRouting) {
         return "Routing";
@@ -145,12 +145,12 @@ const char* Discord::GetState()
 }
 void Discord::ResolveLevel()
 {
-    Leaderboard lb;
-    if (this->isActive && Leaderboard::TryFindByLevelName(this->level, lb)) {
-        std::strcpy(this->large.key, lb.levelName);
-        std::strcpy(this->large.text, lb.chamberName);
-    } else {
-        if (this->isActive) {
+    if (!this->isMenuing) {
+        Leaderboard lb;
+        if (Leaderboard::TryFindByLevelName(this->level, lb)) {
+            std::strcpy(this->large.key, lb.levelName);
+            std::strcpy(this->large.text, lb.chamberName);
+        } else {
             std::strcpy(this->large.key, "puzzlemaker_newchamber");
 
             if (std::strstr(this->level, "puzzlemaker/")) {
@@ -160,10 +160,10 @@ void Discord::ResolveLevel()
             } else {
                 std::strcpy(this->large.text, "Custom Map");
             }
-        } else {
-            std::strcpy(this->large.key, "main_menu");
-            std::strcpy(this->large.text, "Main Menu");
         }
+    } else {
+        std::strcpy(this->large.key, "main_menu");
+        std::strcpy(this->large.text, "Main Menu");
     }
 }
 void Discord::ResolveRank()
@@ -175,7 +175,8 @@ void Discord::ResolveRank()
 
         Leaderboard lb;
         Chamber chamber;
-        if (this->isGrinding
+        if (!this->isMenuing
+            && this->isGrinding
             && Leaderboard::TryFindByLevelName(this->level, lb)
             && lb.DoesExist()
             && this->iverb->TryGetChamber(lb.bestTimeId, chamber)) {
@@ -212,24 +213,24 @@ void Discord::SendPresence()
 
         presence.startTimestamp = this->timestamp = time(0);
         console->Debug("New timestamp!\n");
-
-        this->ResolveLevel();
-        this->ResolveRank();
-
-        if (this->large.isActive) {
-            presence.largeImageKey = this->large.key;
-            presence.largeImageText = this->large.text;
-        }
-        if (this->small.isActive) {
-            presence.smallImageKey = this->small.key;
-            presence.smallImageText = this->small.text;
-        }
     } else {
         presence.startTimestamp = this->timestamp;
     }
 
     presence.details = details;
     presence.state = state;
+
+    this->ResolveLevel();
+    this->ResolveRank();
+
+    if (this->large.isActive) {
+        presence.largeImageKey = this->large.key;
+        presence.largeImageText = this->large.text;
+    }
+    if (this->small.isActive) {
+        presence.smallImageKey = this->small.key;
+        presence.smallImageText = this->small.text;
+    }
 
     Discord_UpdatePresence(&presence);
 }
@@ -244,7 +245,7 @@ void Discord::Update()
     DETECT_CHANGE_B(this->isRouting, sv_cheats.GetBool())
     DETECT_CHANGE_B(this->isViewing, engine->IsPlayingBack(engine->demoplayer))
     DETECT_CHANGE_B(this->isRendering, engine->CL_IsRecordingMovie())
-    DETECT_CHANGE_B(this->isActive, engine->hoststate->m_activeGame)
+    DETECT_CHANGE_B(this->isMenuing, engine->IsInMenu())
     DETECT_CHANGE_B(this->isMapping, engine->IsInEditMode())
     DETECT_CHANGE_B(this->isListening, engine->IsInCommentaryMode())
 

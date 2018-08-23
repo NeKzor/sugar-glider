@@ -31,6 +31,12 @@ public:
     void Shutdown() override;
 
     bool CL_IsRecordingMovie();
+
+    inline bool IsInMenu()
+    {
+        return !this->hoststate->m_activeGame
+            && this->hoststate->m_currentState == HOSTSTATES::HS_RUN;
+    }
 };
 
 extern Engine* engine;
