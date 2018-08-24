@@ -4,10 +4,10 @@ SDIR=src/
 LDIR=lib/
 ODIR=obj/
 
-RPC=/usr/local/lib/libdiscord-rpc.a
-CURL=/usr/local/lib/libcurl.a
-CRYPTO=/usr/local/lib/libcrypto.a
-SSL=/usr/local/lib/libssl.a
+RPC=$(LDIR)discord-rpc/linux/libdiscord-rpc.a
+CURL=$(LDIR)curl/linux/libcurl.a
+CRYPTO=$(LDIR)openssl/libcrypto.a
+SSL=$(LDIR)openssl/libssl.a
 
 SRCS=$(wildcard $(SDIR)*.cpp)
 SRCS+=$(wildcard $(SDIR)Modules/*.cpp)
@@ -23,6 +23,8 @@ STFU=-Wno-unused-function -Wno-unused-variable -Wno-parentheses -Wno-unknown-pra
 CFLAGS=-std=c++17 -m32 -fPIC -static-libstdc++ -shared -Wall $(STFU) -I$(LDIR) -I$(SDIR)
 EXPORT=cp -fu
 
+all: dirs | sgp
+
 sgp: $(OBJS)
 	$(CC) $(CFLAGS) -o $(BINARY) $^ $(RPC) $(CURL) $(CRYPTO) $(SSL) -lssl -lcrypto -ldl
 	@$(EXPORT) "$(BINARY)" "$(STEAM)Portal 2/portal2/$(BINARY)"
@@ -36,3 +38,12 @@ clean:
 
 clean-all:
 	@rm -rf $(OBJS) $(BINARY)
+
+dirs:
+	@mkdir -p $(ODIR)
+	@mkdir -p $(ODIR)Modules/
+	@mkdir -p $(ODIR)Portal2Boards/
+	@mkdir -p $(ODIR)Portal2Boards/Entities/
+	@mkdir -p $(ODIR)Portal2Boards/Entities/Aggregated/
+	@mkdir -p $(ODIR)Portal2Boards/Entities/Chamber/
+	@mkdir -p $(ODIR)Portal2Boards/Extensions/
