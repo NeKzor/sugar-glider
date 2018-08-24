@@ -36,7 +36,6 @@ Discord::Discord()
     this->isViewing = engine->IsPlayingBack(engine->demoplayer);
     this->isRendering = engine->CL_IsRecordingMovie();
     this->isMenuing = engine->IsInMenu();
-    this->isMapping = engine->IsHammerRunning();
     this->isListening = engine->IsInCommentaryMode();
     this->iverb = new Client("portal2-discord-plugin/1.0");
     this->largeAsset.isActive = true;
@@ -85,9 +84,6 @@ const char* Discord::GetDetails()
     if (this->isMenuing) {
         return "Main Menu";
     }
-    if (this->isMapping) {
-        return "Hammer Editor";
-    }
     if (std::strstr(this->level, PUZZLEMAKER_STRING)) {
         return "Puzzle Maker";
     }
@@ -127,7 +123,7 @@ const char* Discord::GetState()
     if (this->isMenuing) {
         return "Menuing";
     }
-    if (this->isMapping || std::strstr(this->level, PUZZLEMAKER_STRING)) {
+    if (std::strstr(this->level, PUZZLEMAKER_STRING)) {
         return "Mapping";
     }
     if (this->isRouting) {
@@ -248,7 +244,6 @@ void Discord::Update()
     DETECT_CHANGE_B(this->isViewing, engine->IsPlayingBack(engine->demoplayer))
     DETECT_CHANGE_B(this->isRendering, engine->CL_IsRecordingMovie())
     DETECT_CHANGE_B(this->isMenuing, engine->IsInMenu())
-    DETECT_CHANGE_B(this->isMapping, engine->IsHammerRunning())
     DETECT_CHANGE_B(this->isListening, engine->IsInCommentaryMode())
 
     if (change) {

@@ -51,7 +51,6 @@ private:
     bool isViewing;
     bool isRendering;
     bool isMenuing;
-    bool isMapping;
     bool isListening;
     // Connection
     Portal2Boards::Client* iverb;

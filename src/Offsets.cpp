@@ -11,21 +11,12 @@ int m_pConCommandList;
 // CEngineClient
 int ClientCmd;
 int GetMaxClients;
-int IsHammerRunning;
 int IsInCommentaryMode;
-int ServerCmdKeyValues;
 
 // ConVar
 int InternalSetValue;
 int InternalSetFloatValue;
 int InternalSetIntValue;
-
-// CGameEventManager
-int AddListener;
-int RemoveListener;
-int FireEventClientSide;
-int FireEventIntern;
-int ConPrintEvent;
 
 // CClientState
 int SetSignonState;

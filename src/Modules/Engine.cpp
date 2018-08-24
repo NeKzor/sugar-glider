@@ -19,7 +19,6 @@ Engine::Engine()
     , demoplayer(nullptr)
     , moviename(nullptr)
     , GetMaxClients(nullptr)
-    , IsHammerRunning(nullptr)
     , IsInCommentaryMode(nullptr)
     , IsPlayingBack(nullptr)
 {
@@ -29,7 +28,6 @@ bool Engine::Init()
     auto engine = Interface::Create(MODULE("engine"), "VEngineClient0", false);
     if (engine) {
         this->GetMaxClients = engine->Original<_GetMaxClients>(Offsets::GetMaxClients);
-        this->IsHammerRunning = engine->Original<_IsHammerRunning>(Offsets::IsHammerRunning);
         this->IsInCommentaryMode = engine->Original<_IsInCommentaryMode>(Offsets::IsInCommentaryMode);
 
         typedef void* (*_GetClientState)();
@@ -61,7 +59,6 @@ bool Engine::Init()
         && this->demoplayer != nullptr
         && this->moviename != nullptr
         && this->GetMaxClients != nullptr
-        && this->IsHammerRunning != nullptr
         && this->IsInCommentaryMode != nullptr
         && this->IsPlayingBack != nullptr
         && !!sv_cheats

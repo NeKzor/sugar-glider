@@ -18,9 +18,6 @@ public:
     using _GetMaxClients = int (*)();
     _GetMaxClients GetMaxClients;
 
-    using _IsHammerRunning = bool (*)();
-    _IsHammerRunning IsHammerRunning;
-
     using _IsInCommentaryMode = bool (*)();
     _IsInCommentaryMode IsInCommentaryMode;
 

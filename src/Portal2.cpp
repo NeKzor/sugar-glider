@@ -20,7 +20,6 @@ void Portal2::LoadOffsets()
     ClientCmd = 7; // CEngineClient
     GetClientStateFunction = 4; // CEngineClient::ClientCmd
     GetMaxClients = 20; // CEngineClient
-    IsHammerRunning = 103; // CEngineClient
     IsInCommentaryMode = 171; // CEngineClient
     HostState_OnClientConnected = 684; // CClientState::SetSignonState
     hoststate = 1; // HostState_OnClientConnected
@@ -46,7 +45,6 @@ void Portal2::LoadOffsets()
     ClientCmd = 7; // CEngineClient
     GetClientStateFunction = 11; // CEngineClient::ClientCmd
     GetMaxClients = 20; // CEngineClient
-    IsHammerRunning = 103; // CEngineClient
     IsInCommentaryMode = 172; // CEngineClient
     HostState_OnClientConnected = 735; // CClientState::SetSignonState
     hoststate = 9; // HostState_OnClientConnected
