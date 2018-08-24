@@ -3,9 +3,9 @@
 #include <cstdint>
 
 #ifdef _WIN32
-#define __funcc __thiscall
+#define __funccc __thiscall
 #else
-#define __funcc __attribute__((__cdecl__))
+#define __funccc __attribute__((__cdecl__))
 #endif
 
 struct Vector {
@@ -80,13 +80,13 @@ class ConCommandBase;
 
 using _CommandCallback = void (*)(const CCommand& args);
 using _CommandCompletionCallback = int (*)(const char* partial, char commands[COMMAND_COMPLETION_MAXITEMS][COMMAND_COMPLETION_ITEM_LENGTH]);
-using _InternalSetValue = void(__funcc*)(void* thisptr, const char* value);
-using _InternalSetFloatValue = void(__funcc*)(void* thisptr, float value);
-using _InternalSetIntValue = void(__funcc*)(void* thisptr, int value);
-using _RegisterConCommand = void(__funcc*)(void* thisptr, ConCommandBase* pCommandBase);
-using _UnregisterConCommand = void(__funcc*)(void* thisptr, ConCommandBase* pCommandBase);
-using _FindCommandBase = void*(__funcc*)(void* thisptr, const char* name);
-using _AutoCompletionFunc = int(__funcc*)(void* thisptr, char const* partial, char commands[COMMAND_COMPLETION_MAXITEMS][COMMAND_COMPLETION_ITEM_LENGTH]);
+using _InternalSetValue = void(__funccc*)(void* thisptr, const char* value);
+using _InternalSetFloatValue = void(__funccc*)(void* thisptr, float value);
+using _InternalSetIntValue = void(__funccc*)(void* thisptr, int value);
+using _RegisterConCommand = void(__funccc*)(void* thisptr, ConCommandBase* pCommandBase);
+using _UnregisterConCommand = void(__funccc*)(void* thisptr, ConCommandBase* pCommandBase);
+using _FindCommandBase = void*(__funccc*)(void* thisptr, const char* name);
+using _AutoCompletionFunc = int(__funccc*)(void* thisptr, char const* partial, char commands[COMMAND_COMPLETION_MAXITEMS][COMMAND_COMPLETION_ITEM_LENGTH]);
 
 class ConCommandBase {
 public:

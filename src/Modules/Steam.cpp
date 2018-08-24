@@ -14,23 +14,24 @@ Steam::Steam()
 }
 bool Steam::Init()
 {
-    // TODO: offsets
-    auto libsteam_api = Memory::GetModuleHandleByName(MODULE("libsteam_api"));
-    if (libsteam_api) {
-        auto SteamClient = Memory::GetSymbolAddress<void* (*)()>(libsteam_api, "SteamClient");
+    auto steam_api = Memory::GetModuleHandleByName(MODULE(STEAM_API));
+    if (steam_api) {
+        auto SteamClient = Memory::GetSymbolAddress<void* (*)()>(steam_api, ISteamClient_Symbol);
         if (SteamClient) {
             auto client = SteamClient();
-            auto pipe = Memory::VMT<int (*)(void*)>(client, 0)(client);
-            auto handle = Memory::VMT<int (*)(void*, int)>(client, 2)(client, pipe);
+            auto CreateSteamPipe = Memory::VMT<int(__funcc*)(void*)>(client, ISteamClient_CreateSteamPipe);
+            auto ConnectToGlobalUser = Memory::VMT<int(__funcc*)(void*, int)>(client, ISteamClient_ConnectToGlobalUser);
+            auto GetISteamUser = Memory::VMT<ISteamUser*(__funcc*)(void*, int, int, const char*)>(client, ISteamClient_GetISteamUser);
 
-            this->user = Memory::VMT<ISteamUser* (*)(void*, int, int, const char*)>(client, 5)(client, handle, pipe, "SteamUser019");
+            auto pipe = CreateSteamPipe(client);
+            auto handle = ConnectToGlobalUser(client, pipe);
+            this->user = GetISteamUser(client, handle, pipe, STEAMUSER_INTERFACE_VERSION);
             if (this->user) {
-                auto id = this->user->GetSteamID();
-                console->Debug("SGP: Hello %llu!\n", id.ConvertToUint64());
+                console->Debug("SGP: Hello %llu!\n", this->user->GetSteamID().ConvertToUint64());
             }
         }
     }
-    Memory::CloseModuleHandle(libsteam_api);
+    Memory::CloseModuleHandle(steam_api);
 
     return this->hasLoaded = this->user != nullptr;
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "Interface.hpp"
 #include "Module.hpp"
+#include "Platform.hpp"
 #include "Variable.hpp"
 
 #include "SDK.hpp"
@@ -16,9 +17,6 @@ public:
 
     using _GetMaxClients = int (*)();
     _GetMaxClients GetMaxClients;
-
-    using _IsInEditMode = bool (*)();
-    _IsInEditMode IsInEditMode;
 
     using _IsInCommentaryMode = bool (*)();
     _IsInCommentaryMode IsInCommentaryMode;

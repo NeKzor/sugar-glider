@@ -33,6 +33,5 @@ DLL_EXPORT void* CreateInterface(const char* pName, int* pReturnCode)
 Plugin::Plugin()
     : ptr(nullptr)
     , index(0)
-    , found(false)
 {
 }

@@ -32,21 +32,24 @@ bool CDiscordPlugin::Load(CreateInterfaceFn interfaceFactory, CreateInterfaceFn 
             this->modules->AddModule<Steam>(&steam);
             this->modules->InitAll();
 
-            if (engine->hasLoaded && steam->hasLoaded) {
-                this->discord = new Discord();
-                this->discord->Init();
-                this->StartMainThread();
+            if (engine->hasLoaded) {
+                if (steam->hasLoaded) {
+                    this->discord = new Discord();
+                    this->StartMainThread();
 
-                this->plugin = new Plugin();
-                this->StartPluginThread();
+                    this->plugin = new Plugin();
+                    this->StartPluginThread();
 
-                console->PrintActive("Loaded sugar-glider plugin, Version %s (by NeKz)\n", this->Version());
-                return true;
+                    console->PrintActive("Loaded sugar-glider plugin, Version %s (by NeKz)\n", this->Version());
+                    return true;
+                } else {
+                    console->Warning("SGP: Failed to load steam module!\n");
+                }
             } else {
-                console->Warning("SGP: Could not load stuff from the engine!\n");
+                console->Warning("SGP: Failed to load engine module!\n");
             }
         } else {
-            console->Warning("SGP: Could not register any commands!\n");
+            console->Warning("SGP: Failed to load tier1 module!\n");
         }
     } else {
         console->Warning("SGP: Game not supported!\n");
@@ -74,10 +77,10 @@ const char* CDiscordPlugin::GetPluginDescription()
 }
 
 // We don't use any callbacks
-bool CDiscordPlugin::PluginFound()
+bool CDiscordPlugin::TryGetPlugin()
 {
     static Interface* s_ServerPlugin = Interface::Create(MODULE("engine"), "ISERVERPLUGINHELPERS0", false);
-    if (!this->plugin->found && s_ServerPlugin) {
+    if (s_ServerPlugin) {
         auto m_Size = *reinterpret_cast<int*>((uintptr_t)s_ServerPlugin->ThisPtr() + CServerPlugin_m_Size);
         //console->Debug("m_Size = %i\n", m_Size);
         if (m_Size > 0) {
@@ -85,21 +88,20 @@ bool CDiscordPlugin::PluginFound()
             for (int i = 0; i < m_Size; i++) {
                 auto ptr = *reinterpret_cast<CPlugin**>(m_Plugins + sizeof(uintptr_t) * i);
                 if (!std::strcmp(ptr->m_szName, SGP_SIGNATURE)) {
-                    this->plugin->index = i;
                     this->plugin->ptr = ptr;
-                    this->plugin->found = true;
-                    break;
+                    this->plugin->index = i;
+                    return true;
                 }
             }
         }
     }
-    return this->plugin->found;
+    return false;
 }
 void CDiscordPlugin::StartPluginThread()
 {
     this->pluginThread = std::thread([this]() {
         GO_THE_FUCK_TO_SLEEP(1000);
-        if (!this->PluginFound()) {
+        if (!this->TryGetPlugin()) {
             console->DevWarning("SGP: Failed to find sugar-glider plugin in the plugin list!\n");
         } else {
             this->plugin->ptr->m_bDisable = true;
@@ -112,9 +114,10 @@ void CDiscordPlugin::StartMainThread()
 {
     this->isRunning = true;
     this->mainThread = std::thread([this]() {
-        while (this->isRunning && engine->hoststate->m_currentState <= HOSTSTATES::HS_RUN) {
+        this->discord->Init();
+        while (this->isRunning && engine->hoststate->m_currentState != HOSTSTATES::HS_SHUTDOWN) {
             this->discord->Update();
-            GO_THE_FUCK_TO_SLEEP(333);
+            GO_THE_FUCK_TO_SLEEP(60);
         }
 
         SAFE_UNLOAD(this->discord);

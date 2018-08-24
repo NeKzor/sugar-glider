@@ -6,7 +6,9 @@
 #include <string.h>
 #include <time.h>
 
-#ifndef _WIN32
+#ifdef _WIN32
+#include "discord-rpc/win32/discord_rpc.h"
+#else
 #include "discord-rpc/linux/discord_rpc.h"
 #endif
 
@@ -22,8 +24,8 @@ Discord::Discord()
     : level("unknown")
     , globalRank("")
     , levelRank("")
-    , large()
-    , small()
+    , largeAsset()
+    , smallAsset()
     , details("")
     , state("")
     , timestamp()
@@ -34,10 +36,9 @@ Discord::Discord()
     this->isViewing = engine->IsPlayingBack(engine->demoplayer);
     this->isRendering = engine->CL_IsRecordingMovie();
     this->isMenuing = engine->IsInMenu();
-    this->isMapping = engine->IsInEditMode();
     this->isListening = engine->IsInCommentaryMode();
     this->iverb = new Client("portal2-discord-plugin/1.0");
-    this->large.isActive = true;
+    this->largeAsset.isActive = true;
 }
 Discord::~Discord()
 {
@@ -54,7 +55,7 @@ void Discord::Init()
         auto steamId = steam->GetLocalSteamId();
         for (const auto& entry : global.points) {
             if (entry.first == steamId) {
-                auto rank = std::string("Global Rank: ") + std::to_string(entry.second.scoreData.playerRank);
+                auto rank = std::string("Global Rank ") + std::to_string(entry.second.scoreData.playerRank);
                 console->Debug("SGP: Global rank of %llu -> %i\n", steamId, entry.second.scoreData.playerRank);
                 std::strcpy(this->globalRank, rank.c_str());
             }
@@ -83,10 +84,7 @@ const char* Discord::GetDetails()
     if (this->isMenuing) {
         return "Main Menu";
     }
-    if (this->isMapping) {
-        return "Hammer Editor";
-    }
-    if (std::strstr(this->level, "puzzlemaker/")) {
+    if (std::strstr(this->level, PUZZLEMAKER_STRING)) {
         return "Puzzle Maker";
     }
     if (this->isListening) {
@@ -98,7 +96,7 @@ const char* Discord::GetDetails()
     if (this->isCooping) {
         return "Cooperative";
     }
-    if (std::strstr(this->level, "workshop/")) {
+    if (std::strstr(this->level, WORKSHOP_STRING)) {
         return "Workshop";
     }
 
@@ -125,7 +123,7 @@ const char* Discord::GetState()
     if (this->isMenuing) {
         return "Menuing";
     }
-    if (this->isMapping || std::strstr(this->level, "puzzlemaker/")) {
+    if (std::strstr(this->level, PUZZLEMAKER_STRING)) {
         return "Mapping";
     }
     if (this->isRouting) {
@@ -148,30 +146,30 @@ void Discord::ResolveLevel()
     if (!this->isMenuing) {
         Leaderboard lb;
         if (Leaderboard::TryFindByLevelName(this->level, lb)) {
-            std::strcpy(this->large.key, lb.levelName);
-            std::strcpy(this->large.text, lb.chamberName);
+            std::strcpy(this->largeAsset.key, lb.levelName);
+            std::strcpy(this->largeAsset.text, lb.chamberName);
         } else {
-            std::strcpy(this->large.key, "puzzlemaker_newchamber");
+            std::strcpy(this->largeAsset.key, "puzzlemaker_newchamber");
 
-            if (std::strstr(this->level, "puzzlemaker/")) {
-                std::strcpy(this->large.text, "Puzzler Maker");
-            } else if (std::strstr(this->level, "workshop/")) {
-                std::strcpy(this->large.text, "Workshop");
+            if (std::strstr(this->level, PUZZLEMAKER_STRING)) {
+                std::strcpy(this->largeAsset.text, "Puzzler Maker");
+            } else if (std::strstr(this->level, WORKSHOP_STRING)) {
+                std::strcpy(this->largeAsset.text, "Workshop");
             } else {
-                std::strcpy(this->large.text, "Custom Map");
+                std::strcpy(this->largeAsset.text, "Custom Map");
             }
         }
     } else {
-        std::strcpy(this->large.key, "main_menu");
-        std::strcpy(this->large.text, "Main Menu");
+        std::strcpy(this->largeAsset.key, "main_menu");
+        std::strcpy(this->largeAsset.text, "Main Menu");
     }
 }
 void Discord::ResolveRank()
 {
-    this->small.isActive = false;
+    this->smallAsset.isActive = false;
 
     if (std::strlen(this->globalRank) != 0) {
-        std::strcpy(this->small.key, "iverb");
+        std::strcpy(this->smallAsset.key, "iverb");
 
         Leaderboard lb;
         Chamber chamber;
@@ -183,19 +181,19 @@ void Discord::ResolveRank()
             auto steamId = steam->GetLocalSteamId();
             for (const auto& entry : chamber.entries) {
                 if (entry.first == steamId) {
-                    auto rank = std::string("Rank: ") + std::to_string(entry.second.score.playerRank);
+                    auto rank = std::string("Rank ") + std::to_string(entry.second.score.playerRank);
                     console->Debug("Level rank of %llu for %s -> %i\n", steamId, lb.chamberName, entry.second.score.playerRank);
-                    std::strcpy(this->small.text, rank.c_str());
-                    this->small.isActive = true;
+                    std::strcpy(this->smallAsset.text, rank.c_str());
+                    this->smallAsset.isActive = true;
                 }
             }
 
-            if (!this->small.isActive) {
+            if (!this->smallAsset.isActive) {
                 console->Debug("Unable to find rank of %llu for %s!\n", steamId, lb.chamberName);
             }
         } else {
-            std::strcpy(this->small.text, this->globalRank);
-            this->small.isActive = true;
+            std::strcpy(this->smallAsset.text, this->globalRank);
+            this->smallAsset.isActive = true;
         }
     }
 }
@@ -223,13 +221,13 @@ void Discord::SendPresence()
     this->ResolveLevel();
     this->ResolveRank();
 
-    if (this->large.isActive) {
-        presence.largeImageKey = this->large.key;
-        presence.largeImageText = this->large.text;
+    if (this->largeAsset.isActive) {
+        presence.largeImageKey = this->largeAsset.key;
+        presence.largeImageText = this->largeAsset.text;
     }
-    if (this->small.isActive) {
-        presence.smallImageKey = this->small.key;
-        presence.smallImageText = this->small.text;
+    if (this->smallAsset.isActive) {
+        presence.smallImageKey = this->smallAsset.key;
+        presence.smallImageText = this->smallAsset.text;
     }
 
     Discord_UpdatePresence(&presence);
@@ -246,7 +244,6 @@ void Discord::Update()
     DETECT_CHANGE_B(this->isViewing, engine->IsPlayingBack(engine->demoplayer))
     DETECT_CHANGE_B(this->isRendering, engine->CL_IsRecordingMovie())
     DETECT_CHANGE_B(this->isMenuing, engine->IsInMenu())
-    DETECT_CHANGE_B(this->isMapping, engine->IsInEditMode())
     DETECT_CHANGE_B(this->isListening, engine->IsInCommentaryMode())
 
     if (change) {

@@ -1,9 +1,7 @@
 .vscode/
 *.so
 *.o
-addons/
 assets/
-bin/
 obj/
 repos/
 

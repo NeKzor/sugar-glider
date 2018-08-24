@@ -7,6 +7,7 @@
 ## Supported Systems
 
 - Linux
+- Windows
 
 ## Detection
 
@@ -15,8 +16,8 @@ The order matters.
 ### Details
 
 - Demo Player
-- Puzzle Maker
 - Main Menu
+- Puzzle Maker
 - Developer Commentary
 - Challenge Mode
 - Cooperative
@@ -29,8 +30,8 @@ The order matters.
 
 - Rendering
 - Viewing
-- Mapping
 - Menuing
+- Mapping
 - Routing
 - Listening
 - Grinding
@@ -47,13 +48,12 @@ It does not update the rankings frequently. Global rank will be determined once 
 
 Game is x86 only, probably want to remember how to build this sht again lmao.
 
-|Dependency|Configuration|
-|---|---|
-|[discord-rpc](https://github.com/discordapp/discord-rpc)|set_target_properties(discord-rpc PROPERTIESCOMPILE_FLAGS "-m32" LINK_FLAGS "-m32")|
-|[openssl](https://github.com/openssl/openssl)|-m32 linux-generic32|
-|[curl](https://github.com/curl/curl)|--with-ssl --host=i686-linux-gnu --build=i686-linux-gnu CC="gcc -m32" CXX="g++ -m32" CFLAGS="-O2 -march=i686" CXXFLAGS="-O2 -march=i686"|
-|[restclient-cpp](https://github.com/mrtazz/restclient-cpp)|Same as above without the ssl part.|
-|[json](https://github.com/nlohmann/json)|Single include.|
+|Dependency|Linux|Windows|
+|---|---|---|
+|[discord-rpc](https://github.com/discordapp/discord-rpc)|set_target_properties(discord-rpc PROPERTIESCOMPILE_FLAGS "-m32" LINK_FLAGS "-m32")|-|
+|[openssl](https://github.com/openssl/openssl)|-m32 linux-generic32|-|
+|[curl](https://github.com/curl/curl)|--with-ssl --host=i686-linux-gnu --build=i686-linux-gnu CC="gcc -m32" CXX="g++ -m32" CFLAGS="-O2 -march=i686" CXXFLAGS="-O2 -march=i686"|LIB Release - DLL Windows SSPI|
+|[json](https://github.com/nlohmann/json)|-|-|
 
 ## Credits
 

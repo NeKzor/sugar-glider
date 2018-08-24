@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="src\Modules">
+      <UniqueIdentifier>{e60b7286-7758-4057-bf4c-8f07ed1fdb60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Portal2Boards">
+      <UniqueIdentifier>{1318a285-1e24-44ad-8872-5905d164666d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Portal2Boards\Entities">
+      <UniqueIdentifier>{37d2f4a9-d81c-400e-a0ab-c06e998a6001}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Portal2Boards\Entities\Aggregated">
+      <UniqueIdentifier>{ba973197-4cde-4daf-ace9-a9915e9b469e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Portal2Boards\Entities\Chamber">
+      <UniqueIdentifier>{35e24052-7237-4d72-a84e-6199cdc57532}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Portal2Boards\Extensions">
+      <UniqueIdentifier>{6532c77a-e8ad-453f-bd8e-05952009f8fd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CDiscordPlugin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Discord.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Offsets.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Plugin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal2.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Variable.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Modules\Console.cpp">
+      <Filter>src\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Modules\Engine.cpp">
+      <Filter>src\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Modules\Module.cpp">
+      <Filter>src\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Modules\Steam.cpp">
+      <Filter>src\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Modules\Tier1.cpp">
+      <Filter>src\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal2Boards\Extensions\Leaderboard.cpp">
+      <Filter>src\Portal2Boards\Extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal2Boards\Client.cpp">
+      <Filter>src\Portal2Boards</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CDiscordPlugin.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Discord.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Offsets.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugin.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal2.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Variable.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Modules\Console.hpp">
+      <Filter>src\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Modules\Engine.hpp">
+      <Filter>src\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Modules\Module.hpp">
+      <Filter>src\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Modules\Steam.hpp">
+      <Filter>src\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Modules\Tier1.hpp">
+      <Filter>src\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal2Boards\Portal2Boards.hpp">
+      <Filter>src\Portal2Boards</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal2Boards\Extensions\Leaderboard.hpp">
+      <Filter>src\Portal2Boards\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal2Boards\Extensions\MapType.hpp">
+      <Filter>src\Portal2Boards\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal2Boards\Entities\Aggregated\Aggregated.hpp">
+      <Filter>src\Portal2Boards\Entities\Aggregated</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal2Boards\Entities\Aggregated\AggregatedData.hpp">
+      <Filter>src\Portal2Boards\Entities\Aggregated</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal2Boards\Entities\Chamber\Chamber.hpp">
+      <Filter>src\Portal2Boards\Entities\Chamber</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal2Boards\Entities\Chamber\ChamberEntry.hpp">
+      <Filter>src\Portal2Boards\Entities\Chamber</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal2Boards\Entities\Chamber\ChamberEntryScoreData.hpp">
+      <Filter>src\Portal2Boards\Entities\Chamber</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal2Boards\Entities\EntryScoreData.hpp">
+      <Filter>src\Portal2Boards\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal2Boards\Entities\EntryUserData.hpp">
+      <Filter>src\Portal2Boards\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal2Boards\Client.hpp">
+      <Filter>src\Portal2Boards</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal2Boards\Entities.hpp">
+      <Filter>src\Portal2Boards</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

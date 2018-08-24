@@ -11,21 +11,12 @@ extern int m_pConCommandList;
 // CEngineClient
 extern int ClientCmd;
 extern int GetMaxClients;
-extern int IsInEditMode;
 extern int IsInCommentaryMode;
-extern int ServerCmdKeyValues;
 
 // ConVar
 extern int InternalSetValue;
 extern int InternalSetFloatValue;
 extern int InternalSetIntValue;
-
-// CGameEventManager
-extern int AddListener;
-extern int RemoveListener;
-extern int FireEventClientSide;
-extern int FireEventIntern;
-extern int ConPrintEvent;
 
 // CClientState
 extern int SetSignonState;

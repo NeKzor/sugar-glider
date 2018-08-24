@@ -16,7 +16,7 @@ public:
     // submission
     std::string submission;
     // changelogId
-    uint changelogId;
+    unsigned int changelogId;
     // date
     std::string date; // can be null
     // hasDemo

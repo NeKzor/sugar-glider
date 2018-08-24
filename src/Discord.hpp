@@ -4,6 +4,14 @@
 #define APP_ID "478256997314330634"
 #define STEAM_APP_ID "620"
 
+#ifdef _WIN32
+#define WORKSHOP_STRING "workshop\\"
+#define PUZZLEMAKER_STRING "puzzlemaker\\"
+#else
+#define WORKSHOP_STRING "workshop/"
+#define PUZZLEMAKER_STRING "puzzlemaker/"
+#endif
+
 #define DETECT_CHANGE_S(prevState, curState)             \
     if (std::strcmp(prevState, curState) != 0) {         \
         std::strcpy(prevState, curState);                \
@@ -43,15 +51,14 @@ private:
     bool isViewing;
     bool isRendering;
     bool isMenuing;
-    bool isMapping;
     bool isListening;
     // Connection
     Portal2Boards::Client* iverb;
     char globalRank[32];
     char levelRank[32];
     // Assets
-    DiscordAsset large;
-    DiscordAsset small;
+    DiscordAsset largeAsset;
+    DiscordAsset smallAsset;
     // Cache
     char details[256];
     char state[256];
