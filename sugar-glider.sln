@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sugar-glider", "src\sugar-glider.vcxproj", "{99AB12F1-A32E-4AB3-A86A-4D3136277C11}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AAAEAC41-EB55-4E16-BB56-D6193D3C7B9B}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		makefile = makefile
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{763D8577-127B-4131-982D-94C0208F5BE8}"
+	ProjectSection(SolutionItems) = preProject
+		doc\screenie.png = doc\screenie.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "addons", "addons", "{0B44C0CC-8AD4-4731-A7A3-4CE72B248C2B}"
+	ProjectSection(SolutionItems) = preProject
+		addons\sgp.vdf = addons\sgp.vdf
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{99AB12F1-A32E-4AB3-A86A-4D3136277C11}.Debug|x64.ActiveCfg = Debug|x64
+		{99AB12F1-A32E-4AB3-A86A-4D3136277C11}.Debug|x64.Build.0 = Debug|x64
+		{99AB12F1-A32E-4AB3-A86A-4D3136277C11}.Debug|x86.ActiveCfg = Debug|Win32
+		{99AB12F1-A32E-4AB3-A86A-4D3136277C11}.Debug|x86.Build.0 = Debug|Win32
+		{99AB12F1-A32E-4AB3-A86A-4D3136277C11}.Release|x64.ActiveCfg = Release|x64
+		{99AB12F1-A32E-4AB3-A86A-4D3136277C11}.Release|x64.Build.0 = Release|x64
+		{99AB12F1-A32E-4AB3-A86A-4D3136277C11}.Release|x86.ActiveCfg = Release|Win32
+		{99AB12F1-A32E-4AB3-A86A-4D3136277C11}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{763D8577-127B-4131-982D-94C0208F5BE8} = {AAAEAC41-EB55-4E16-BB56-D6193D3C7B9B}
+		{0B44C0CC-8AD4-4731-A7A3-4CE72B248C2B} = {AAAEAC41-EB55-4E16-BB56-D6193D3C7B9B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C06A649C-8F37-40BD-8A87-FD895A6C5A14}
+	EndGlobalSection
+EndGlobal

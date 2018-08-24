@@ -20,8 +20,8 @@ void Portal2::LoadOffsets()
     ClientCmd = 7; // CEngineClient
     GetClientStateFunction = 4; // CEngineClient::ClientCmd
     GetMaxClients = 20; // CEngineClient
-    IsInEditMode = 96; // CEngineClient (TODO)
-    IsInCommentaryMode = 172; // CEngineClient (TODO)
+    IsInEditMode = 96; // CEngineClient
+    IsInCommentaryMode = 171; // CEngineClient
     HostState_OnClientConnected = 684; // CClientState::SetSignonState
     hoststate = 1; // HostState_OnClientConnected
     Disconnect = 16; //  CClientState
@@ -34,7 +34,7 @@ void Portal2::LoadOffsets()
     ConPrintEvent = 303; // CGameEventManager::FireEventIntern
     AutoCompletionFunc = 66; // listdemo_CompletionFunc
     SetSignonState = 15; // CClientState
-    CL_IsRecordingMovie = 2; // endmovie (TODO)
+    CL_IsRecordingMovie = 2; // endmovie
 
     // vstdlib.dll
 

@@ -7,6 +7,7 @@
 ## Supported Systems
 
 - Linux
+- Windows
 
 ## Detection
 

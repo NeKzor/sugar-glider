@@ -11,7 +11,7 @@ using json = nlohmann::json;
 
 class Chamber {
 public:
-    uint id;
+    unsigned int id;
     std::map<unsigned long long, ChamberEntry> entries;
 
 public:
@@ -20,7 +20,7 @@ public:
         , entries()
     {
     }
-    void Parse(uint id, json data)
+    void Parse(unsigned int id, json data)
     {
         this->id = id;
         for (json::iterator it = data.begin(); it != data.end(); ++it) {

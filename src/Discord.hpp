@@ -46,12 +46,14 @@ private:
     bool isMapping;
     bool isListening;
     // Connection
+#ifndef _WIN32
     Portal2Boards::Client* iverb;
+#endif
     char globalRank[32];
     char levelRank[32];
     // Assets
-    DiscordAsset large;
-    DiscordAsset small;
+    DiscordAsset largeAsset;
+    DiscordAsset smallAsset;
     // Cache
     char details[256];
     char state[256];

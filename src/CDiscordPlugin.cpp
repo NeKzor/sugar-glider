@@ -32,21 +32,25 @@ bool CDiscordPlugin::Load(CreateInterfaceFn interfaceFactory, CreateInterfaceFn 
             this->modules->AddModule<Steam>(&steam);
             this->modules->InitAll();
 
-            if (engine->hasLoaded && steam->hasLoaded) {
-                this->discord = new Discord();
-                this->discord->Init();
-                this->StartMainThread();
+            if (engine->hasLoaded) {
+                if (steam->hasLoaded) {
+                    this->discord = new Discord();
+                    this->discord->Init();
+                    this->StartMainThread();
 
-                this->plugin = new Plugin();
-                this->StartPluginThread();
+                    this->plugin = new Plugin();
+                    this->StartPluginThread();
 
-                console->PrintActive("Loaded sugar-glider plugin, Version %s (by NeKz)\n", this->Version());
-                return true;
+                    console->PrintActive("Loaded sugar-glider plugin, Version %s (by NeKz)\n", this->Version());
+                    return true;
+                } else {
+                    console->Warning("SGP: Failed to load steam module!\n");
+                }
             } else {
-                console->Warning("SGP: Could not load stuff from the engine!\n");
+                console->Warning("SGP: Failed to load engine module!\n");
             }
         } else {
-            console->Warning("SGP: Could not register any commands!\n");
+            console->Warning("SGP: Failed to load tier1 module!\n");
         }
     } else {
         console->Warning("SGP: Game not supported!\n");
@@ -112,7 +116,7 @@ void CDiscordPlugin::StartMainThread()
 {
     this->isRunning = true;
     this->mainThread = std::thread([this]() {
-        while (this->isRunning && engine->hoststate->m_currentState <= HOSTSTATES::HS_RUN) {
+        while (this->isRunning) {
             this->discord->Update();
             GO_THE_FUCK_TO_SLEEP(333);
         }

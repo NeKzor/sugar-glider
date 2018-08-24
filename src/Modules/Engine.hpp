@@ -1,6 +1,7 @@
 #pragma once
 #include "Interface.hpp"
 #include "Module.hpp"
+#include "Platform.hpp"
 #include "Variable.hpp"
 
 #include "SDK.hpp"
