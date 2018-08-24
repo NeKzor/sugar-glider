@@ -59,7 +59,7 @@ public:
     const char* Build() { return SGP_BUILD; }
     const char* Website() { return SGP_WEB; }
 
-    bool PluginFound();
+    bool TryGetPlugin();
 
 private:
     void StartPluginThread();

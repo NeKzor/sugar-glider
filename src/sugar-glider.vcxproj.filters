@@ -70,6 +70,9 @@
     <ClCompile Include="Portal2Boards\Extensions\Leaderboard.cpp">
       <Filter>src\Portal2Boards\Extensions</Filter>
     </ClCompile>
+    <ClCompile Include="Portal2Boards\Client.cpp">
+      <Filter>src\Portal2Boards</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDiscordPlugin.hpp">
@@ -152,6 +155,12 @@
     </ClInclude>
     <ClInclude Include="Portal2Boards\Entities\EntryUserData.hpp">
       <Filter>src\Portal2Boards\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal2Boards\Client.hpp">
+      <Filter>src\Portal2Boards</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal2Boards\Entities.hpp">
+      <Filter>src\Portal2Boards</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

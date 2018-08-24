@@ -6,7 +6,7 @@
 #include <string.h>
 #include <time.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include "discord-rpc/win32/discord_rpc.h"
 #else
 #include "discord-rpc/linux/discord_rpc.h"
@@ -36,32 +36,27 @@ Discord::Discord()
     this->isViewing = engine->IsPlayingBack(engine->demoplayer);
     this->isRendering = engine->CL_IsRecordingMovie();
     this->isMenuing = engine->IsInMenu();
-    this->isMapping = engine->IsInEditMode();
+    this->isMapping = engine->IsHammerRunning();
     this->isListening = engine->IsInCommentaryMode();
-#ifndef _WIN32
     this->iverb = new Client("portal2-discord-plugin/1.0");
-#endif
     this->largeAsset.isActive = true;
 }
 Discord::~Discord()
 {
-#ifndef _WIN32
     if (this->iverb) {
         delete this->iverb;
         this->iverb = nullptr;
     }
-#endif
     this->Shutdown();
 }
 void Discord::Init()
 {
-#ifndef _WIN32
     Aggregated global;
     if (this->iverb->TryGetAggregated(AggregatedMode::Overall, global)) {
         auto steamId = steam->GetLocalSteamId();
         for (const auto& entry : global.points) {
             if (entry.first == steamId) {
-                auto rank = std::string("Global Rank: ") + std::to_string(entry.second.scoreData.playerRank);
+                auto rank = std::string("Global Rank ") + std::to_string(entry.second.scoreData.playerRank);
                 console->Debug("SGP: Global rank of %llu -> %i\n", steamId, entry.second.scoreData.playerRank);
                 std::strcpy(this->globalRank, rank.c_str());
             }
@@ -73,7 +68,7 @@ void Discord::Init()
     } else {
         console->Warning("SGP: Failed to fetch aggregated leaderboard!\n");
     }
-#endif
+
     DiscordEventHandlers handlers;
     std::memset(&handlers, 0, sizeof(handlers));
     handlers.ready = Discord::OnDiscordReady;
@@ -93,7 +88,7 @@ const char* Discord::GetDetails()
     if (this->isMapping) {
         return "Hammer Editor";
     }
-    if (std::strstr(this->level, "puzzlemaker/")) {
+    if (std::strstr(this->level, PUZZLEMAKER_STRING)) {
         return "Puzzle Maker";
     }
     if (this->isListening) {
@@ -105,7 +100,7 @@ const char* Discord::GetDetails()
     if (this->isCooping) {
         return "Cooperative";
     }
-    if (std::strstr(this->level, "workshop/")) {
+    if (std::strstr(this->level, WORKSHOP_STRING)) {
         return "Workshop";
     }
 
@@ -132,7 +127,7 @@ const char* Discord::GetState()
     if (this->isMenuing) {
         return "Menuing";
     }
-    if (this->isMapping || std::strstr(this->level, "puzzlemaker/")) {
+    if (this->isMapping || std::strstr(this->level, PUZZLEMAKER_STRING)) {
         return "Mapping";
     }
     if (this->isRouting) {
@@ -160,9 +155,9 @@ void Discord::ResolveLevel()
         } else {
             std::strcpy(this->largeAsset.key, "puzzlemaker_newchamber");
 
-            if (std::strstr(this->level, "puzzlemaker/")) {
+            if (std::strstr(this->level, PUZZLEMAKER_STRING)) {
                 std::strcpy(this->largeAsset.text, "Puzzler Maker");
-            } else if (std::strstr(this->level, "workshop/")) {
+            } else if (std::strstr(this->level, WORKSHOP_STRING)) {
                 std::strcpy(this->largeAsset.text, "Workshop");
             } else {
                 std::strcpy(this->largeAsset.text, "Custom Map");
@@ -176,7 +171,7 @@ void Discord::ResolveLevel()
 void Discord::ResolveRank()
 {
     this->smallAsset.isActive = false;
-#ifndef _WIN32
+
     if (std::strlen(this->globalRank) != 0) {
         std::strcpy(this->smallAsset.key, "iverb");
 
@@ -190,7 +185,7 @@ void Discord::ResolveRank()
             auto steamId = steam->GetLocalSteamId();
             for (const auto& entry : chamber.entries) {
                 if (entry.first == steamId) {
-                    auto rank = std::string("Rank: ") + std::to_string(entry.second.score.playerRank);
+                    auto rank = std::string("Rank ") + std::to_string(entry.second.score.playerRank);
                     console->Debug("Level rank of %llu for %s -> %i\n", steamId, lb.chamberName, entry.second.score.playerRank);
                     std::strcpy(this->smallAsset.text, rank.c_str());
                     this->smallAsset.isActive = true;
@@ -205,7 +200,6 @@ void Discord::ResolveRank()
             this->smallAsset.isActive = true;
         }
     }
-#endif
 }
 void Discord::SendPresence()
 {
@@ -254,7 +248,7 @@ void Discord::Update()
     DETECT_CHANGE_B(this->isViewing, engine->IsPlayingBack(engine->demoplayer))
     DETECT_CHANGE_B(this->isRendering, engine->CL_IsRecordingMovie())
     DETECT_CHANGE_B(this->isMenuing, engine->IsInMenu())
-    DETECT_CHANGE_B(this->isMapping, engine->IsInEditMode())
+    DETECT_CHANGE_B(this->isMapping, engine->IsHammerRunning())
     DETECT_CHANGE_B(this->isListening, engine->IsInCommentaryMode())
 
     if (change) {

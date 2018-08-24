@@ -4,15 +4,14 @@
 #include <string>
 #include <vector>
 
+#include "curl/curl.h"
 #include "nlohmann/json.hpp"
-#include "restclient-cpp/connection.h"
-#include "restclient-cpp/restclient.h"
 
-#include <iostream>
+// Note: Using console module for debugging
+#include "Modules/Console.hpp"
 
 namespace Portal2Boards {
 
-namespace RC = RestClient;
 using json = nlohmann::json;
 
 Client::Client(const char* userAgent)
@@ -23,20 +22,23 @@ Client::Client(const char* userAgent)
         std::snprintf(this->ua, sizeof(this->ua), "%s %s", userAgent, this->ua);
     }
 
-    RC::init();
-    this->client = new RC::Connection(this->api);
-    this->client->SetTimeout(5);
-    this->client->SetUserAgent(this->ua);
+    this->client = curl_easy_init();
+    curl_easy_setopt(this->client, CURLOPT_USERAGENT, this->ua);
 }
 Client::~Client()
 {
     if (this->client) {
-        delete this->client;
+        curl_easy_cleanup(this->client);
         this->client = nullptr;
     }
-    RC::disable();
 }
-bool Client::TryGetAggregated(AggregatedMode mode, Aggregated& result)
+// Curl needs this function :>
+size_t WriteFunction(void* ptr, size_t size, size_t nmemb, std::string* data)
+{
+    data->append((char*)ptr, size * nmemb);
+    return size * nmemb;
+}
+bool Client::TryGetAggregated(const AggregatedMode mode, Aggregated& result)
 {
     std::string url;
     switch (mode) {
@@ -55,24 +57,52 @@ bool Client::TryGetAggregated(AggregatedMode mode, Aggregated& result)
     }
 
     char get[64];
-    std::snprintf(get, sizeof(get), "/aggregated%s/json", url.c_str());
+    std::snprintf(get, sizeof(get), "%s/aggregated%s/json", this->api, url.c_str());
 
-    auto response = this->client->get(get);
-    if (response.code == 200) {
-        result.Parse(json::parse(response.body));
-        return true;
+    std::string responseHeader;
+    std::string responseBody;
+    curl_easy_setopt(this->client, CURLOPT_URL, get);
+    curl_easy_setopt(this->client, CURLOPT_HEADERDATA, &responseHeader);
+    curl_easy_setopt(this->client, CURLOPT_WRITEDATA, &responseBody);
+    curl_easy_setopt(this->client, CURLOPT_WRITEFUNCTION, WriteFunction);
+
+    auto code = curl_easy_perform(this->client);
+    if (code == CURLcode::CURLE_OK) {
+        long response;
+        curl_easy_getinfo(this->client, CURLINFO_RESPONSE_CODE, &response);
+        console->Debug("SGP: CURL -> %s (%d)\n", get, response);
+        if (response == 200) {
+            result.Parse(json::parse(responseBody));
+            return true;
+        }
+    } else {
+        console->Debug("SGP: CURL Error -> %i\n", code);
     }
     return false;
 }
-bool Client::TryGetChamber(uint bestTimeId, Chamber& result)
+bool Client::TryGetChamber(unsigned int bestTimeId, Chamber& result)
 {
     char get[64];
-    std::snprintf(get, sizeof(get), "/chamber/%i/json", bestTimeId);
+    std::snprintf(get, sizeof(get), "%s/chamber/%i/json", this->api, bestTimeId);
 
-    auto response = this->client->get(get);
-    if (response.code == 200) {
-        result.Parse(bestTimeId, json::parse(response.body));
-        return true;
+    std::string responseHeader;
+    std::string responseBody;
+    curl_easy_setopt(this->client, CURLOPT_URL, get);
+    curl_easy_setopt(this->client, CURLOPT_HEADERDATA, &responseHeader);
+    curl_easy_setopt(this->client, CURLOPT_WRITEDATA, &responseBody);
+    curl_easy_setopt(this->client, CURLOPT_WRITEFUNCTION, WriteFunction);
+
+    auto code = curl_easy_perform(this->client);
+    if (code == CURLcode::CURLE_OK) {
+        long response;
+        curl_easy_getinfo(this->client, CURLINFO_RESPONSE_CODE, &response);
+        console->Debug("SGP: CURL -> %s (%d)\n", get, response);
+        if (response == 200) {
+            result.Parse(bestTimeId, json::parse(responseBody));
+            return true;
+        }
+    } else {
+        console->Debug("SGP: CURL Error -> %i\n", code);
     }
     return false;
 }

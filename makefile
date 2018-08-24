@@ -5,7 +5,6 @@ LDIR=lib/
 ODIR=obj/
 
 RPC=/usr/local/lib/libdiscord-rpc.a
-RC=/usr/local/lib/librestclient-cpp.a
 CURL=/usr/local/lib/libcurl.a
 CRYPTO=/usr/local/lib/libcrypto.a
 SSL=/usr/local/lib/libssl.a
@@ -25,7 +24,7 @@ CFLAGS=-std=c++17 -m32 -fPIC -static-libstdc++ -shared -Wall $(STFU) -I$(LDIR) -
 EXPORT=cp -fu
 
 sgp: $(OBJS)
-	$(CC) $(CFLAGS) -o $(BINARY) $^ $(RPC) $(RC) $(CURL) $(CRYPTO) $(SSL) -lssl -lcrypto -ldl
+	$(CC) $(CFLAGS) -o $(BINARY) $^ $(RPC) $(CURL) $(CRYPTO) $(SSL) -lssl -lcrypto -ldl
 	@$(EXPORT) "$(BINARY)" "$(STEAM)Portal 2/portal2/$(BINARY)"
 
 $(ODIR)%.o: $(SDIR)%.cpp $(SDIR)%.hpp

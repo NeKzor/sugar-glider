@@ -19,32 +19,23 @@ Engine::Engine()
     , demoplayer(nullptr)
     , moviename(nullptr)
     , GetMaxClients(nullptr)
-    , IsInEditMode(nullptr)
+    , IsHammerRunning(nullptr)
     , IsInCommentaryMode(nullptr)
     , IsPlayingBack(nullptr)
 {
 }
 bool Engine::Init()
 {
-    //console->Debug("SGP: Hi\n");
     auto engine = Interface::Create(MODULE("engine"), "VEngineClient0", false);
     if (engine) {
         this->GetMaxClients = engine->Original<_GetMaxClients>(Offsets::GetMaxClients);
-        this->IsInEditMode = engine->Original<_IsInEditMode>(Offsets::IsInEditMode);
+        this->IsHammerRunning = engine->Original<_IsHammerRunning>(Offsets::IsHammerRunning);
         this->IsInCommentaryMode = engine->Original<_IsInCommentaryMode>(Offsets::IsInCommentaryMode);
 
-        void* clPtr = nullptr;
-        if (g_DiscordPlugin.game->IsPortal2Engine()) {
-            typedef void* (*_GetClientState)();
-            auto ClientCmd = engine->Original(Offsets::ClientCmd);
-            auto GetClientState = Memory::Read<_GetClientState>(ClientCmd + Offsets::GetClientStateFunction);
-            clPtr = GetClientState();
-        } else {
-            auto ServerCmdKeyValues = engine->Original(Offsets::ServerCmdKeyValues);
-            clPtr = Memory::Deref<void*>(ServerCmdKeyValues + Offsets::cl);
-        }
-
-        auto cl = Interface::Create(clPtr, false);
+        typedef void* (*_GetClientState)();
+        auto ClientCmd = engine->Original(Offsets::ClientCmd);
+        auto GetClientState = Memory::Read<_GetClientState>(ClientCmd + Offsets::GetClientStateFunction);
+        auto cl = Interface::Create(GetClientState(), false);
         if (cl) {
             auto SetSignonState = cl->Original(Offsets::SetSignonState);
             auto HostState_OnClientConnected = Memory::Read(SetSignonState + Offsets::HostState_OnClientConnected);
@@ -70,7 +61,7 @@ bool Engine::Init()
         && this->demoplayer != nullptr
         && this->moviename != nullptr
         && this->GetMaxClients != nullptr
-        && this->IsInEditMode != nullptr
+        && this->IsHammerRunning != nullptr
         && this->IsInCommentaryMode != nullptr
         && this->IsPlayingBack != nullptr
         && !!sv_cheats

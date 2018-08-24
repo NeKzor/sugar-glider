@@ -18,8 +18,8 @@ public:
     using _GetMaxClients = int (*)();
     _GetMaxClients GetMaxClients;
 
-    using _IsInEditMode = bool (*)();
-    _IsInEditMode IsInEditMode;
+    using _IsHammerRunning = bool (*)();
+    _IsHammerRunning IsHammerRunning;
 
     using _IsInCommentaryMode = bool (*)();
     _IsInCommentaryMode IsInCommentaryMode;

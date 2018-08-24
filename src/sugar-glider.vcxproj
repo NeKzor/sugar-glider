@@ -32,6 +32,7 @@
     <ClCompile Include="Offsets.cpp" />
     <ClCompile Include="Plugin.cpp" />
     <ClCompile Include="Portal2.cpp" />
+    <ClCompile Include="Portal2Boards\Client.cpp" />
     <ClCompile Include="Portal2Boards\Extensions\Leaderboard.cpp" />
     <ClCompile Include="Variable.cpp" />
   </ItemGroup>
@@ -51,6 +52,8 @@
     <ClInclude Include="Platform.hpp" />
     <ClInclude Include="Plugin.hpp" />
     <ClInclude Include="Portal2.hpp" />
+    <ClInclude Include="Portal2Boards\Client.hpp" />
+    <ClInclude Include="Portal2Boards\Entities.hpp" />
     <ClInclude Include="Portal2Boards\Entities\Aggregated\Aggregated.hpp" />
     <ClInclude Include="Portal2Boards\Entities\Aggregated\AggregatedData.hpp" />
     <ClInclude Include="Portal2Boards\Entities\Chamber\Chamber.hpp" />
@@ -166,7 +169,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;SUGARGLIDER_EXPORTS;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;SUGARGLIDER_EXPORTS;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;CURL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)lib;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -175,7 +178,11 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)lib\discord-rpc\win32\discord-rpc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)lib\discord-rpc\win32\discord-rpc.lib;$(SolutionDir)lib\curl\win32\libcurl.lib;Crypt32.lib;wldap32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>
+      </IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(TargetDir)$(TargetName).dll" "C:\Program Files (x86)\Steam\SteamApps\common\Portal 2\portal2\addons\$(TargetName).dll</Command>

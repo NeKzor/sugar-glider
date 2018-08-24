@@ -11,7 +11,7 @@ int m_pConCommandList;
 // CEngineClient
 int ClientCmd;
 int GetMaxClients;
-int IsInEditMode;
+int IsHammerRunning;
 int IsInCommentaryMode;
 int ServerCmdKeyValues;
 
