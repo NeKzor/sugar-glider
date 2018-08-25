@@ -9,6 +9,11 @@
 - Linux
 - Windows
 
+## Supported Mods
+
+- Aperture Tag
+- Portal Stories: Mel
+
 ## Detection
 
 The order matters.

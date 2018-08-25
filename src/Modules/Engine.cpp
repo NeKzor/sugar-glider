@@ -19,6 +19,7 @@ Engine::Engine()
     , demoplayer(nullptr)
     , moviename(nullptr)
     , GetMaxClients(nullptr)
+    , GetGameDirectory(nullptr)
     , IsInCommentaryMode(nullptr)
     , IsPlayingBack(nullptr)
 {
@@ -28,6 +29,7 @@ bool Engine::Init()
     auto engine = Interface::Create(MODULE("engine"), "VEngineClient0", false);
     if (engine) {
         this->GetMaxClients = engine->Original<_GetMaxClients>(Offsets::GetMaxClients);
+        this->GetGameDirectory = engine->Original<_GetGameDirectory>(Offsets::GetGameDirectory);
         this->IsInCommentaryMode = engine->Original<_IsInCommentaryMode>(Offsets::IsInCommentaryMode);
 
         typedef void* (*_GetClientState)();

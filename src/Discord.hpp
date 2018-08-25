@@ -1,8 +1,13 @@
 #pragma once
 #include "Portal2Boards/Portal2Boards.hpp"
 
-#define APP_ID "478256997314330634"
-#define STEAM_APP_ID "620"
+#define P2_APP_ID "478256997314330634"
+#define AT_APP_ID "482831216165257216"
+#define PS_APP_ID "482833874406211584"
+
+#define P2_STEAM_APP_ID "620"
+#define AT_STEAM_APP_ID "280740"
+#define PS_STEAM_APP_ID "317400"
 
 #ifdef _WIN32
 #define WORKSHOP_STRING "workshop\\"
@@ -53,6 +58,7 @@ private:
     bool isMenuing;
     bool isListening;
     // Connection
+    bool hasChallengeMode;
     Portal2Boards::Client* iverb;
     char globalRank[32];
     char levelRank[32];
@@ -67,7 +73,7 @@ private:
 public:
     Discord();
     ~Discord();
-    void Init();
+    bool Init();
     void SendPresence();
     void Update();
     void Shutdown();

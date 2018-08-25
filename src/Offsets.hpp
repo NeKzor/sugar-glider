@@ -11,6 +11,7 @@ extern int m_pConCommandList;
 // CEngineClient
 extern int ClientCmd;
 extern int GetMaxClients;
+extern int GetGameDirectory;
 extern int IsInCommentaryMode;
 
 // ConVar

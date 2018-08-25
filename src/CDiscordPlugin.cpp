@@ -100,12 +100,12 @@ void CDiscordPlugin::StartMainThread()
 {
     this->isRunning = true;
     this->mainThread = std::thread([this]() {
-        this->discord->Init();
-        while (this->isRunning && engine->hoststate->m_currentState != HOSTSTATES::HS_SHUTDOWN) {
-            this->discord->Update();
-            GO_THE_FUCK_TO_SLEEP(60);
+        if (this->discord->Init()) {
+            while (this->isRunning && engine->hoststate->m_currentState != HOSTSTATES::HS_SHUTDOWN) {
+                this->discord->Update();
+                GO_THE_FUCK_TO_SLEEP(60);
+            }
         }
-
         SAFE_UNLOAD(this->discord);
     });
 }

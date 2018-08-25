@@ -22,6 +22,7 @@ using namespace Portal2Boards;
 
 Discord::Discord()
     : level("unknown")
+    , hasChallengeMode(false)
     , globalRank("")
     , levelRank("")
     , largeAsset()
@@ -48,33 +49,50 @@ Discord::~Discord()
     }
     this->Shutdown();
 }
-void Discord::Init()
+bool Discord::Init()
 {
-    Aggregated global;
-    if (this->iverb->TryGetAggregated(AggregatedMode::Overall, global)) {
-        auto steamId = steam->GetLocalSteamId();
-        for (const auto& entry : global.points) {
-            if (entry.first == steamId) {
-                auto rank = std::string("Global Rank ") + std::to_string(entry.second.scoreData.playerRank);
-                console->Debug("SGP: Global rank of %llu -> %i\n", steamId, entry.second.scoreData.playerRank);
-                std::strcpy(this->globalRank, rank.c_str());
-            }
-        }
-
-        if (std::strlen(this->globalRank) == 0) {
-            console->DevWarning("SGP: Player with id %llu does not have board.iverb.me profile!\n", steamId);
-        }
-    } else {
-        console->Warning("SGP: Failed to fetch aggregated leaderboard!\n");
-    }
-
     DiscordEventHandlers handlers;
     std::memset(&handlers, 0, sizeof(handlers));
     handlers.ready = Discord::OnDiscordReady;
     handlers.disconnected = Discord::OnDiscordDisconnected;
     handlers.errored = Discord::OnDiscordErrored;
-    Discord_Initialize(APP_ID, &handlers, 1, STEAM_APP_ID);
+
+    auto mod = engine->GetModDir().c_str();
+    if (std::strcmp(mod, "portal2") == 0) {
+        Discord_Initialize(P2_APP_ID, &handlers, 1, P2_STEAM_APP_ID);
+        this->hasChallengeMode = true;
+    } else if (std::strcmp(mod, "aperturetag") == 0) {
+        Discord_Initialize(AT_APP_ID, &handlers, 1, AT_STEAM_APP_ID);
+    } else if (std::strcmp(mod, "portal_stories") == 0) {
+        Discord_Initialize(PS_APP_ID, &handlers, 1, PS_STEAM_APP_ID);
+    } else {
+        return false;
+    }
+
+    console->Debug("SGP: Detected mod directory %s!\n", mod);
     Discord_RunCallbacks();
+
+    if (this->hasChallengeMode) {
+        Aggregated global;
+        if (this->iverb->TryGetAggregated(AggregatedMode::Overall, global)) {
+            auto steamId = steam->GetLocalSteamId();
+            for (const auto& entry : global.points) {
+                if (entry.first == steamId) {
+                    auto rank = std::string("Global Rank ") + std::to_string(entry.second.scoreData.playerRank);
+                    console->Debug("SGP: Global rank of %llu -> %i\n", steamId, entry.second.scoreData.playerRank);
+                    std::strcpy(this->globalRank, rank.c_str());
+                }
+            }
+
+            if (std::strlen(this->globalRank) == 0) {
+                console->DevWarning("SGP: Player with id %llu does not have board.iverb.me profile!\n", steamId);
+            }
+        } else {
+            console->Warning("SGP: Failed to fetch aggregated leaderboard!\n");
+        }
+    }
+
+    return true;
 }
 const char* Discord::GetDetails()
 {
@@ -168,7 +186,7 @@ void Discord::ResolveRank()
 {
     this->smallAsset.isActive = false;
 
-    if (std::strlen(this->globalRank) != 0) {
+    if (this->hasChallengeMode && std::strlen(this->globalRank) != 0) {
         std::strcpy(this->smallAsset.key, "iverb");
 
         Leaderboard lb;

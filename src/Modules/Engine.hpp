@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+
 #include "Interface.hpp"
 #include "Module.hpp"
 #include "Platform.hpp"
@@ -18,6 +20,9 @@ public:
     using _GetMaxClients = int (*)();
     _GetMaxClients GetMaxClients;
 
+    using _GetGameDirectory = char*(__cdecl*)();
+    _GetGameDirectory GetGameDirectory;
+
     using _IsInCommentaryMode = bool (*)();
     _IsInCommentaryMode IsInCommentaryMode;
 
@@ -34,6 +39,12 @@ public:
     {
         return !this->hoststate->m_activeGame
             && this->hoststate->m_currentState == HOSTSTATES::HS_RUN;
+    }
+    std::string GetModDir()
+    {
+        auto dir = std::string(this->GetGameDirectory());
+        auto index = dir.find_last_of("\\/");
+        return dir.substr(index + 1, dir.length() - index);
     }
 };
 

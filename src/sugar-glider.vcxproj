@@ -186,6 +186,8 @@
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(TargetDir)$(TargetName).dll" "C:\Program Files (x86)\Steam\SteamApps\common\Portal 2\portal2\addons\$(TargetName).dll</Command>
+      <Command>copy /Y "$(TargetDir)$(TargetName).dll" "C:\Program Files (x86)\Steam\SteamApps\common\Aperture Tag\aperture_tag\addons\$(TargetName).dll</Command>
+      <Command>copy /Y "$(TargetDir)$(TargetName).dll" "C:\Program Files (x86)\Steam\SteamApps\common\Portal Stories: Mel\portalstories\addons\$(TargetName).dll</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
