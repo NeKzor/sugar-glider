@@ -112,7 +112,7 @@ const char* Discord::GetDetails()
         return "Challenge Mode";
     }
     if (this->isCooping) {
-        return "Cooperative";
+        return "Cooperative Game";
     }
     if (std::strstr(this->level, WORKSHOP_STRING)) {
         return "Workshop";
@@ -123,7 +123,7 @@ const char* Discord::GetDetails()
         if (lb.type == MapType::SinglePlayer)
             return "Single Player";
         if (lb.type == MapType::Cooperative)
-            return "Cooperative";
+            return "Cooperative Game";
         if (lb.type == MapType::Extras)
             return "Extras";
     }

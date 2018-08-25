@@ -25,7 +25,7 @@ The order matters.
 - Puzzle Maker
 - Developer Commentary
 - Challenge Mode
-- Cooperative
+- Cooperative Game
 - Workshop
 - Single Player
 - Extras

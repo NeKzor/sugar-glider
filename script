@@ -1,0 +1,7 @@
+#!/bin/bash
+for file in assets/*.jpg; do
+  [ -e "$file" ] || continue
+  mv "$file" "${file%????????}.jpg"
+  echo "$file -> ${file%????????}.jpg"
+done
+
