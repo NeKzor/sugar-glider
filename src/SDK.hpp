@@ -221,17 +221,6 @@ public:
     }
 };
 
-enum SignonState {
-    None = 0,
-    Challenge = 1,
-    Connected = 2,
-    New = 3,
-    Prespawn = 4,
-    Spawn = 5,
-    Full = 6,
-    Changelevel = 7
-};
-
 typedef enum {
     HS_NEW_GAME = 0,
     HS_LOAD_GAME = 1,
@@ -259,6 +248,7 @@ struct CHostState {
 };
 
 #define INTERFACEVERSION_ISERVERPLUGINCALLBACKS "ISERVERPLUGINCALLBACKS002"
+#define INTERFACEVERSION_ISERVERPLUGINHELPERS "ISERVERPLUGINHELPERS001"
 
 typedef void* (*CreateInterfaceFn)(const char* pName, int* pReturnCode);
 typedef void* (*InstantiateInterfaceFn)();
@@ -326,67 +316,6 @@ struct CPlugin {
     static className __g_##className##_singleton;                      \
     EXPOSE_SINGLE_INTERFACE_GLOBALVAR(className, interfaceName, versionName, __g_##className##_singleton)
 
-struct CGlobalVarsBase {
-    float realtime; // 0
-    int framecount; // 4
-    float absoluteframetime; // 8
-    float curtime; // 12
-    float frametime; // 16
-    int maxClients; // 20
-    int tickcount; // 24
-    float interval_per_tick; // 28
-    float interpolation_amount; // 32
-    int simTicksThisFrame; // 36
-    int network_protocol; // 40
-    void* pSaveData; // 44
-    bool m_bClient; // 48
-    int nTimestampNetworkingBase; // 52
-    int nTimestampRandomizeWindow; // 56
-};
-
-enum MapLoadType_t {
-    MapLoad_NewGame = 0,
-    MapLoad_LoadGame = 1,
-    MapLoad_Transition = 2,
-    MapLoad_Background = 3
-};
-
-struct CGlobalVars : CGlobalVarsBase {
-    char* mapname; // 60
-    int mapversion; // 64
-    char* startspot; // 68
-    MapLoadType_t eLoadType; // 72
-    bool bMapLoadFailed; // 76
-    bool deathmatch; // 80
-    bool coop; // 84
-    bool teamplay; // 88
-    int maxEntities; // 92
-};
-
-class IGameEvent {
-public:
-    virtual ~IGameEvent() = default;
-    virtual const char* GetName() const = 0;
-    virtual bool IsReliable() const = 0;
-    virtual bool IsLocal() const = 0;
-    virtual bool IsEmpty(const char* key = 0) = 0;
-    virtual bool GetBool(const char* key = 0, bool default_value = false) = 0;
-    virtual int GetInt(const char* key = 0, int default_value = 0) = 0;
-    virtual float GetFloat(const char* key = 0, float default_value = 0.0f) = 0;
-    virtual const char* GetString(const char* key = 0, const char* default_value = "") = 0;
-    virtual void SetBool(const char* key, bool value) = 0;
-    virtual void SetInt(const char* key, int value) = 0;
-    virtual void SetFloat(const char* key, float value) = 0;
-    virtual void SetString(const char* key, const char* value) = 0;
-};
-
-class IGameEventListener2 {
-public:
-    virtual ~IGameEventListener2() = default;
-    virtual void FireGameEvent(IGameEvent* event) = 0;
-    virtual int GetEventDebugID() = 0;
-};
-
 enum EUniverse {
     k_EUniverseInvalid = 0,
     k_EUniversePublic = 1,
@@ -435,6 +364,8 @@ struct CGameID {
     };
 };
 
+#define STEAMUSER_INTERFACE_VERSION "SteamUser019"
+
 class ISteamUser {
 public:
     virtual int GetHSteamUser() = 0;
@@ -444,4 +375,30 @@ public:
     virtual void TerminateGameConnection(unsigned int unIPServer, unsigned short usPortServer) = 0;
     virtual void TrackAppUsageEvent(CGameID gameID, int eAppUsageEvent, const char* pchExtraInfo = "") = 0;
     virtual void RefreshSteam2Login() = 0;
+};
+
+typedef int32_t HSteamPipe;
+typedef int32_t HSteamUser;
+
+class ISteamClient {
+public:
+    virtual HSteamPipe CreateSteamPipe() = 0;
+    virtual bool BReleaseSteamPipe(HSteamPipe hSteamPipe) = 0;
+    virtual HSteamUser ConnectToGlobalUser(HSteamPipe hSteamPipe) = 0;
+    virtual HSteamUser CreateLocalUser(HSteamPipe* phSteamPipe) = 0;
+    virtual void ReleaseUser(HSteamPipe hSteamPipe, HSteamUser hUser) = 0;
+    virtual ISteamUser* GetISteamUser(HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char* pchVersion) = 0;
+    virtual void* GetISteamGameServer(HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char* pchVersion) = 0;
+    virtual void SetLocalIPBinding(int32_t unIP, int16_t usPort) = 0;
+    virtual void* GetISteamFriends(HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char* pchVersion) = 0;
+    virtual void* GetISteamUtils(HSteamPipe hSteamPipe, const char* pchVersion) = 0;
+    virtual void* GetISteamMatchmaking(HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char* pchVersion) = 0;
+    virtual void* GetISteamContentServer(HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char* pchVersion) = 0;
+    virtual void* GetISteamMasterServerUpdater(HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char* pchVersion) = 0;
+    virtual void* GetISteamMatchmakingServers(HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char* pchVersion) = 0;
+    virtual void* GetISteam2Bridge(HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char* pchVersion) = 0;
+    virtual void RunFrame() = 0;
+    virtual int32_t GetIPCCallCount() = 0;
+    virtual void* GetISteamUserStats(HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char* pchVersion) = 0;
+    virtual void* GetISteamApps(HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char* pchVersion) = 0;
 };

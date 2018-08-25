@@ -60,7 +60,17 @@ bool CDiscordPlugin::Load(CreateInterfaceFn interfaceFactory, CreateInterfaceFn 
 }
 void CDiscordPlugin::Unload()
 {
-    console->Print("SGP: Cya!\n");
+    this->Cleanup();
+}
+const char* CDiscordPlugin::GetPluginDescription()
+{
+    return SGP_SIGNATURE;
+}
+
+void CDiscordPlugin::Cleanup()
+{
+    if (console)
+        console->Print("SGP: Cya!\n");
 
     this->isRunning = false;
     if (this->mainThread.joinable())
@@ -71,37 +81,13 @@ void CDiscordPlugin::Unload()
     SAFE_UNLOAD(this->modules);
     SAFE_UNLOAD(console);
 }
-const char* CDiscordPlugin::GetPluginDescription()
-{
-    return SGP_SIGNATURE;
-}
 
 // We don't use any callbacks
-bool CDiscordPlugin::TryGetPlugin()
-{
-    static Interface* s_ServerPlugin = Interface::Create(MODULE("engine"), "ISERVERPLUGINHELPERS0", false);
-    if (s_ServerPlugin) {
-        auto m_Size = *reinterpret_cast<int*>((uintptr_t)s_ServerPlugin->ThisPtr() + CServerPlugin_m_Size);
-        //console->Debug("m_Size = %i\n", m_Size);
-        if (m_Size > 0) {
-            auto m_Plugins = *reinterpret_cast<uintptr_t*>((uintptr_t)s_ServerPlugin->ThisPtr() + CServerPlugin_m_Plugins);
-            for (int i = 0; i < m_Size; i++) {
-                auto ptr = *reinterpret_cast<CPlugin**>(m_Plugins + sizeof(uintptr_t) * i);
-                if (!std::strcmp(ptr->m_szName, SGP_SIGNATURE)) {
-                    this->plugin->ptr = ptr;
-                    this->plugin->index = i;
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
 void CDiscordPlugin::StartPluginThread()
 {
     this->pluginThread = std::thread([this]() {
         GO_THE_FUCK_TO_SLEEP(1000);
-        if (!this->TryGetPlugin()) {
+        if (!this->plugin->Find()) {
             console->DevWarning("SGP: Failed to find sugar-glider plugin in the plugin list!\n");
         } else {
             this->plugin->ptr->m_bDisable = true;
@@ -122,6 +108,11 @@ void CDiscordPlugin::StartMainThread()
 
         SAFE_UNLOAD(this->discord);
     });
+}
+// Might fix potential deadlock
+void __attribute__((destructor)) Exit()
+{
+    g_DiscordPlugin.Cleanup();
 }
 
 #pragma region Unused callbacks

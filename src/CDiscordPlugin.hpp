@@ -12,7 +12,7 @@
 
 #define SGP_VERSION "1.0"
 #define SGP_BUILD __TIME__ " " __DATE__
-#define SGP_WEB "https://nekzor.github.io/portal2-discord-plugin"
+#define SGP_WEB "https://nekzor.github.io/sugar-glider"
 
 #define SAFE_UNLOAD(ptr) \
     if (ptr) {           \
@@ -60,6 +60,7 @@ public:
     const char* Website() { return SGP_WEB; }
 
     bool TryGetPlugin();
+    void Cleanup();
 
 private:
     void StartPluginThread();

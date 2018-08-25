@@ -12,11 +12,6 @@
 #endif
 
 #define ISteamClient_Symbol "SteamClient"
-#define ISteamClient_CreateSteamPipe 0
-#define ISteamClient_ConnectToGlobalUser 2
-#define ISteamClient_GetISteamUser 5
-
-#define STEAMUSER_INTERFACE_VERSION "SteamUser019"
 
 class Steam : public Module {
 public:

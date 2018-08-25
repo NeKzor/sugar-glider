@@ -15,4 +15,5 @@ public:
 
 public:
     Plugin();
+    bool Find();
 };

@@ -8,6 +8,8 @@
 #include "Offsets.hpp"
 #include "Platform.hpp"
 
+#include "SDK.hpp"
+
 Steam::Steam()
     : Module()
 {
@@ -16,18 +18,14 @@ bool Steam::Init()
 {
     auto steam_api = Memory::GetModuleHandleByName(MODULE(STEAM_API));
     if (steam_api) {
-        auto SteamClient = Memory::GetSymbolAddress<void* (*)()>(steam_api, ISteamClient_Symbol);
+        auto SteamClient = Memory::GetSymbolAddress<ISteamClient* (*)()>(steam_api, ISteamClient_Symbol);
         if (SteamClient) {
             auto client = SteamClient();
-            auto CreateSteamPipe = Memory::VMT<int(__funcc*)(void*)>(client, ISteamClient_CreateSteamPipe);
-            auto ConnectToGlobalUser = Memory::VMT<int(__funcc*)(void*, int)>(client, ISteamClient_ConnectToGlobalUser);
-            auto GetISteamUser = Memory::VMT<ISteamUser*(__funcc*)(void*, int, int, const char*)>(client, ISteamClient_GetISteamUser);
-
-            auto pipe = CreateSteamPipe(client);
-            auto handle = ConnectToGlobalUser(client, pipe);
-            this->user = GetISteamUser(client, handle, pipe, STEAMUSER_INTERFACE_VERSION);
+            auto pipe = client->CreateSteamPipe();
+            auto handle = client->ConnectToGlobalUser(pipe);
+            this->user = client->GetISteamUser(handle, pipe, STEAMUSER_INTERFACE_VERSION);
             if (this->user) {
-                console->Debug("SGP: Hello %llu!\n", this->user->GetSteamID().ConvertToUint64());
+                console->Debug("SGP: Hello test subject %llu!\n", this->user->GetSteamID().ConvertToUint64());
             }
         }
     }
