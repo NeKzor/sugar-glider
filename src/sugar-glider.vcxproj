@@ -34,6 +34,7 @@
     <ClCompile Include="Portal2.cpp" />
     <ClCompile Include="Portal2Boards\Client.cpp" />
     <ClCompile Include="Portal2Boards\Extensions\Leaderboard.cpp" />
+    <ClCompile Include="SDK.cpp" />
     <ClCompile Include="Variable.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -177,7 +178,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalDependencies>$(SolutionDir)lib\discord-rpc\win32\discord-rpc.lib;$(SolutionDir)lib\curl\win32\libcurl.lib;Crypt32.lib;wldap32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
@@ -186,8 +187,6 @@
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(TargetDir)$(TargetName).dll" "C:\Program Files (x86)\Steam\SteamApps\common\Portal 2\portal2\addons\$(TargetName).dll</Command>
-      <Command>copy /Y "$(TargetDir)$(TargetName).dll" "C:\Program Files (x86)\Steam\SteamApps\common\Aperture Tag\aperturetag\addons\$(TargetName).dll</Command>
-      <Command>copy /Y "$(TargetDir)$(TargetName).dll" "C:\Program Files (x86)\Steam\SteamApps\common\Portal Stories Mel\portal_stories\addons\$(TargetName).dll</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

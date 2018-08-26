@@ -73,6 +73,9 @@
     <ClCompile Include="Portal2Boards\Client.cpp">
       <Filter>src\Portal2Boards</Filter>
     </ClCompile>
+    <ClCompile Include="SDK.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDiscordPlugin.hpp">

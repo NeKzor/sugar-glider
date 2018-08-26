@@ -38,7 +38,7 @@ Discord::Discord()
     this->isRendering = engine->CL_IsRecordingMovie();
     this->isMenuing = engine->IsInMenu();
     this->isListening = engine->IsInCommentaryMode();
-    this->iverb = new Client("portal2-discord-plugin/1.0");
+    this->iverb = new Client("sugar-glider/1.0");
     this->largeAsset.isActive = true;
 }
 Discord::~Discord()
@@ -57,19 +57,23 @@ bool Discord::Init()
     handlers.disconnected = Discord::OnDiscordDisconnected;
     handlers.errored = Discord::OnDiscordErrored;
 
-    auto mod = engine->GetModDir().c_str();
-    if (std::strcmp(mod, "portal2") == 0) {
+    auto mod = std::string(engine->GetGameDirectory());
+    auto ends_with = [](const std::string& str, const std::string& suffix) {
+        return str.size() >= suffix.size() && !str.compare(str.size() - suffix.size(), suffix.size(), suffix);
+    };
+
+    if (ends_with(mod, "portal2")) {
         Discord_Initialize(P2_APP_ID, &handlers, 1, P2_STEAM_APP_ID);
         this->hasChallengeMode = true;
-    } else if (std::strcmp(mod, "aperturetag") == 0) {
+    } else if (ends_with(mod, "aperturetag")) {
         Discord_Initialize(AT_APP_ID, &handlers, 1, AT_STEAM_APP_ID);
-    } else if (std::strcmp(mod, "portal_stories") == 0) {
+    } else if (ends_with(mod, "portal_stories")) {
         Discord_Initialize(PS_APP_ID, &handlers, 1, PS_STEAM_APP_ID);
     } else {
+        console->Warning("SGP: Mod directory not supported!\n");
         return false;
     }
 
-    console->Debug("SGP: Detected mod directory %s!\n", mod);
     Discord_RunCallbacks();
 
     if (this->hasChallengeMode) {

@@ -110,10 +110,20 @@ void CDiscordPlugin::StartMainThread()
     });
 }
 // Might fix potential deadlock
+#ifndef _WIN32
 void __attribute__((destructor)) Exit()
 {
     g_DiscordPlugin.Cleanup();
 }
+#else
+BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved)
+{
+    if (reason == DLL_PROCESS_DETACH) {
+        g_DiscordPlugin.Cleanup();
+    }
+    return TRUE;
+}
+#endif
 
 #pragma region Unused callbacks
 void CDiscordPlugin::Pause()

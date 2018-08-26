@@ -1,6 +1,7 @@
 .vscode/
 *.so
 *.o
+addons/
 assets/
 obj/
 repos/

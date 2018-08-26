@@ -40,12 +40,6 @@ public:
         return !this->hoststate->m_activeGame
             && this->hoststate->m_currentState == HOSTSTATES::HS_RUN;
     }
-    std::string GetModDir()
-    {
-        auto dir = std::string(this->GetGameDirectory());
-        auto index = dir.find_last_of("\\/");
-        return dir.substr(index + 1, dir.length() - index);
-    }
 };
 
 extern Engine* engine;
