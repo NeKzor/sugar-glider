@@ -67,7 +67,7 @@
     <ClCompile Include="Modules\Tier1.cpp">
       <Filter>src\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Portal2Boards\Extensions\Leaderboard.cpp">
+    <ClCompile Include="Portal2Boards\Extensions\Map.cpp">
       <Filter>src\Portal2Boards\Extensions</Filter>
     </ClCompile>
     <ClCompile Include="Portal2Boards\Client.cpp">
@@ -132,7 +132,7 @@
     <ClInclude Include="Portal2Boards\Portal2Boards.hpp">
       <Filter>src\Portal2Boards</Filter>
     </ClInclude>
-    <ClInclude Include="Portal2Boards\Extensions\Leaderboard.hpp">
+    <ClInclude Include="Portal2Boards\Extensions\Map.hpp">
       <Filter>src\Portal2Boards\Extensions</Filter>
     </ClInclude>
     <ClInclude Include="Portal2Boards\Extensions\MapType.hpp">

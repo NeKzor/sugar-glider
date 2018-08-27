@@ -25,6 +25,7 @@ Discord::Discord()
     , hasChallengeMode(false)
     , globalRank("")
     , levelRank("")
+    , campaign(nullptr)
     , largeAsset()
     , smallAsset()
     , details("")
@@ -65,10 +66,13 @@ bool Discord::Init()
     if (ends_with(mod, "portal2")) {
         Discord_Initialize(P2_APP_ID, &handlers, 1, P2_STEAM_APP_ID);
         this->hasChallengeMode = true;
+        campaign = &Map::portal2;
     } else if (ends_with(mod, "aperturetag")) {
         Discord_Initialize(AT_APP_ID, &handlers, 1, AT_STEAM_APP_ID);
+        campaign = &Map::aperturetag;
     } else if (ends_with(mod, "portal_stories")) {
         Discord_Initialize(PS_APP_ID, &handlers, 1, PS_STEAM_APP_ID);
+        campaign = &Map::portal_stories;
     } else {
         console->Warning("SGP: Mod directory not supported!\n");
         return false;
@@ -122,13 +126,13 @@ const char* Discord::GetDetails()
         return "Workshop";
     }
 
-    Leaderboard lb;
-    if (Leaderboard::TryFindByLevelName(this->level, lb)) {
-        if (lb.type == MapType::SinglePlayer)
+    Map map;
+    if (Map::GetMapByName(this->level, map, campaign)) {
+        if (map.type == MapType::SinglePlayer)
             return "Single Player";
-        if (lb.type == MapType::Cooperative)
+        if (map.type == MapType::Cooperative)
             return "Cooperative Game";
-        if (lb.type == MapType::Extras)
+        if (map.type == MapType::Extras)
             return "Extras";
     }
 
@@ -166,10 +170,10 @@ const char* Discord::GetState()
 void Discord::ResolveLevel()
 {
     if (!this->isMenuing) {
-        Leaderboard lb;
-        if (Leaderboard::TryFindByLevelName(this->level, lb)) {
-            std::strcpy(this->largeAsset.key, lb.levelName);
-            std::strcpy(this->largeAsset.text, lb.chamberName);
+        Map map;
+        if (Map::GetMapByName(this->level, map, campaign)) {
+            std::strcpy(this->largeAsset.key, map.levelName);
+            std::strcpy(this->largeAsset.text, map.chamberName);
         } else {
             std::strcpy(this->largeAsset.key, "puzzlemaker_newchamber");
 
@@ -193,25 +197,25 @@ void Discord::ResolveRank()
     if (this->hasChallengeMode && std::strlen(this->globalRank) != 0) {
         std::strcpy(this->smallAsset.key, "iverb");
 
-        Leaderboard lb;
+        Map map;
         Chamber chamber;
         if (!this->isMenuing
             && this->isGrinding
-            && Leaderboard::TryFindByLevelName(this->level, lb)
-            && lb.DoesExist()
-            && this->iverb->TryGetChamber(lb.bestTimeId, chamber)) {
+            && Map::GetMapByName(this->level, map, campaign)
+            && map.HasLeaderboard()
+            && this->iverb->TryGetChamber(map.bestTimeId, chamber)) {
             auto steamId = steam->GetLocalSteamId();
             for (const auto& entry : chamber.entries) {
                 if (entry.first == steamId) {
                     auto rank = std::string("Rank ") + std::to_string(entry.second.score.playerRank);
-                    console->Debug("Level rank of %llu for %s -> %i\n", steamId, lb.chamberName, entry.second.score.playerRank);
+                    console->Debug("Level rank of %llu for %s -> %i\n", steamId, map.chamberName, entry.second.score.playerRank);
                     std::strcpy(this->smallAsset.text, rank.c_str());
                     this->smallAsset.isActive = true;
                 }
             }
 
             if (!this->smallAsset.isActive) {
-                console->Debug("Unable to find rank of %llu for %s!\n", steamId, lb.chamberName);
+                console->Debug("Unable to find rank of %llu for %s!\n", steamId, map.chamberName);
             }
         } else {
             std::strcpy(this->smallAsset.text, this->globalRank);

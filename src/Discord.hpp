@@ -62,6 +62,7 @@ private:
     Portal2Boards::Client* iverb;
     char globalRank[32];
     char levelRank[32];
+    std::vector<Portal2Boards::Map>* campaign;
     // Assets
     DiscordAsset largeAsset;
     DiscordAsset smallAsset;

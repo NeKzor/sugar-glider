@@ -7,7 +7,6 @@
 #include "Modules/Tier1.hpp"
 
 #include "Game.hpp"
-
 #include "SDK.hpp"
 
 CDiscordPlugin g_DiscordPlugin;

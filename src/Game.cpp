@@ -1,7 +1,6 @@
 #include "Game.hpp"
 
 #include "Memory.hpp"
-
 #include "Portal2.hpp"
 
 const char* Game::Version()

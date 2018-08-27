@@ -7,7 +7,6 @@
 #include "Discord.hpp"
 #include "Game.hpp"
 #include "Plugin.hpp"
-
 #include "SDK.hpp"
 
 #define SGP_VERSION "1.0"

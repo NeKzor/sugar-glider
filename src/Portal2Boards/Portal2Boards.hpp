@@ -1,7 +1,7 @@
 #pragma once
 #include "Client.hpp"
 #include "Entities.hpp"
-#include "Extensions/Leaderboard.hpp"
+#include "Extensions/Map.hpp"
 
 /*
     Mostly copied from Portal2Boards.Net
