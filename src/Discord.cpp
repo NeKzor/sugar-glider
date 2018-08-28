@@ -290,7 +290,7 @@ void Discord::Update()
     if (std::strcmp(this->level, engine->m_szLevelName) != 0) {
         std::strcpy(this->level, engine->m_szLevelName);
         console->Debug("this->level = %s\n", this->level);
-        change = std::strlen(engine->m_szLevelName) != 0;
+        change = change || std::strlen(engine->m_szLevelName) != 0;
     }
 
     if (change) {
