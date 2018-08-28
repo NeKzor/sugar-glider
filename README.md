@@ -1,4 +1,5 @@
-[![Build Version](https://img.shields.io/badge/version-v1.0-brightgreen.svg)](https://github.com/NeKzor/sugar-glider/projects/1)
+[![Build Version](https://img.shields.io/badge/version-v1.1-brightgreen.svg)](https://github.com/NeKzor/sugar-glider/projects/1)
+[![Release Status](https://img.shields.io/github/release/NeKzor/sugar-glider/all.svg)](https://github.com/NeKzor/sugar-glider/releases)
 
 **sugar-glider** is a Source Engine plugin for Portal 2 which connects to a Discord Rich Presence Client application.
 
