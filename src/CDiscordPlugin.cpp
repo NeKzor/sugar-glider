@@ -54,7 +54,7 @@ bool CDiscordPlugin::Load(CreateInterfaceFn interfaceFactory, CreateInterfaceFn 
         console->Warning("SGP: Game not supported!\n");
     }
 
-    console->Warning("SGP: Discord Plugin failed to load!\n");
+    console->Warning("SGP: sugar-glider plugin failed to load!\n");
     return false;
 }
 void CDiscordPlugin::Unload()
@@ -100,6 +100,7 @@ void CDiscordPlugin::StartMainThread()
     this->isRunning = true;
     this->mainThread = std::thread([this]() {
         if (this->discord->Init()) {
+            this->discord->SendPresence();
             while (this->isRunning && engine->hoststate->m_currentState != HOSTSTATES::HS_SHUTDOWN) {
                 this->discord->Update();
                 GO_THE_FUCK_TO_SLEEP(60);
@@ -109,12 +110,7 @@ void CDiscordPlugin::StartMainThread()
     });
 }
 // Might fix potential deadlock
-#ifndef _WIN32
-void __attribute__((destructor)) Exit()
-{
-    g_DiscordPlugin.Cleanup();
-}
-#else
+#ifdef _WIN32
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved)
 {
     if (reason == DLL_PROCESS_DETACH) {

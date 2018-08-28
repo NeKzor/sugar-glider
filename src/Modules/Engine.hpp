@@ -6,14 +6,13 @@
 #include "Platform.hpp"
 #include "Variable.hpp"
 
-#include "SDK.hpp"
-
 extern Variable sv_cheats;
 extern Variable sv_bonus_challenge;
 
 class Engine : public Module {
 public:
     CHostState* hoststate;
+    char* m_szLevelName;
     void* demoplayer;
     char* moviename;
 

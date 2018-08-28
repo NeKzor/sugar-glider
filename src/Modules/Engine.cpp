@@ -16,6 +16,7 @@ Variable sv_bonus_challenge;
 Engine::Engine()
     : Module()
     , hoststate(nullptr)
+    , m_szLevelName(nullptr)
     , demoplayer(nullptr)
     , moviename(nullptr)
     , GetMaxClients(nullptr)
@@ -26,8 +27,7 @@ Engine::Engine()
 }
 bool Engine::Init()
 {
-    auto engine = Interface::Create(MODULE("engine"), "VEngineClient0", false);
-    if (engine) {
+    if (auto engine = Interface::Create(MODULE("engine"), "VEngineClient0", false)) {
         this->GetMaxClients = engine->Original<_GetMaxClients>(Offsets::GetMaxClients);
         this->GetGameDirectory = engine->Original<_GetGameDirectory>(Offsets::GetGameDirectory);
         this->IsInCommentaryMode = engine->Original<_IsInCommentaryMode>(Offsets::IsInCommentaryMode);
@@ -53,6 +53,11 @@ bool Engine::Init()
         this->moviename = Memory::Deref<char*>(cc_endmovie_callback + Offsets::CL_IsRecordingMovie);
     }
 
+    if (auto tool = Interface::Create(MODULE("engine"), "VENGINETOOL0", false)) {
+        auto GetCurrentMap = tool->Original(Offsets::GetCurrentMap);
+        this->m_szLevelName = Memory::Deref<char*>(GetCurrentMap + Offsets::m_szLevelName);
+    }
+
     sv_cheats = Variable("sv_cheats");
     sv_bonus_challenge = Variable("sv_bonus_challenge");
     developer = Variable("developer");
@@ -63,6 +68,7 @@ bool Engine::Init()
         && this->GetMaxClients != nullptr
         && this->IsInCommentaryMode != nullptr
         && this->IsPlayingBack != nullptr
+        && this->m_szLevelName != nullptr
         && !!sv_cheats
         && !!sv_bonus_challenge
         && !!developer;

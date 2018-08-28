@@ -9,7 +9,7 @@
 #include "Plugin.hpp"
 #include "SDK.hpp"
 
-#define SGP_VERSION "1.0"
+#define SGP_VERSION "1.1"
 #define SGP_BUILD __TIME__ " " __DATE__
 #define SGP_WEB "https://nekzor.github.io/sugar-glider"
 

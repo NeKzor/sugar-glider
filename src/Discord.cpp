@@ -39,8 +39,9 @@ Discord::Discord()
     this->isRendering = engine->CL_IsRecordingMovie();
     this->isMenuing = engine->IsInMenu();
     this->isListening = engine->IsInCommentaryMode();
-    this->iverb = new Client("sugar-glider/1.0");
+    this->iverb = new Client("sugar-glider/1.1");
     this->largeAsset.isActive = true;
+    this->prevState = engine->hoststate->m_currentState;
 }
 Discord::~Discord()
 {
@@ -136,7 +137,11 @@ const char* Discord::GetDetails()
             return "Extras";
     }
 
-    return "Custom Map";
+    if (engine->hoststate->m_activeGame && std::strlen(this->level) != 0) {
+        return "Custom Map";
+    }
+
+    return nullptr;
 }
 const char* Discord::GetState()
 {
@@ -169,7 +174,7 @@ const char* Discord::GetState()
 }
 void Discord::ResolveLevel()
 {
-    if (!this->isMenuing) {
+    if (!this->isMenuing && std::strlen(this->level) != 0) {
         Map map;
         if (Map::GetMapByName(this->level, map, campaign)) {
             std::strcpy(this->largeAsset.key, map.levelName);
@@ -200,6 +205,7 @@ void Discord::ResolveRank()
         Map map;
         Chamber chamber;
         if (!this->isMenuing
+            && !this->isViewing
             && this->isGrinding
             && Map::GetMapByName(this->level, map, campaign)
             && map.HasLeaderboard()
@@ -225,11 +231,16 @@ void Discord::ResolveRank()
 }
 void Discord::SendPresence()
 {
-    DiscordRichPresence presence;
-    std::memset(&presence, 0, sizeof(presence));
-
     auto details = this->GetDetails();
     auto state = this->GetState();
+
+    if (!details || !state) {
+        console->Debug("Ignored update!\n");
+        return;
+    }
+
+    DiscordRichPresence presence;
+    std::memset(&presence, 0, sizeof(presence));
 
     if (std::strcmp(this->details, details) != 0 || std::strcmp(this->state, state) != 0) {
         std::strcpy(this->details, details);
@@ -256,6 +267,7 @@ void Discord::SendPresence()
         presence.smallImageText = this->smallAsset.text;
     }
 
+    console->Debug("Update -> %s | %s\n", details, state);
     Discord_UpdatePresence(&presence);
 }
 void Discord::Update()
@@ -263,17 +275,25 @@ void Discord::Update()
     auto change = false;
 
     // Detect changes
-    DETECT_CHANGE_S(this->level, engine->hoststate->m_levelName)
     DETECT_CHANGE_B(this->isCooping, engine->GetMaxClients() >= 2)
     DETECT_CHANGE_B(this->isGrinding, sv_bonus_challenge.GetBool())
     DETECT_CHANGE_B(this->isRouting, sv_cheats.GetBool())
     DETECT_CHANGE_B(this->isViewing, engine->IsPlayingBack(engine->demoplayer))
     DETECT_CHANGE_B(this->isRendering, engine->CL_IsRecordingMovie())
-    DETECT_CHANGE_B(this->isMenuing, engine->IsInMenu())
     DETECT_CHANGE_B(this->isListening, engine->IsInCommentaryMode())
 
+    if (this->prevState != engine->hoststate->m_currentState) {
+        this->prevState = engine->hoststate->m_currentState;
+        DETECT_CHANGE_B(this->isMenuing, engine->IsInMenu())
+    }
+
+    if (std::strcmp(this->level, engine->m_szLevelName) != 0) {
+        std::strcpy(this->level, engine->m_szLevelName);
+        console->Debug("this->level = %s\n", this->level);
+        change = std::strlen(engine->m_szLevelName) != 0;
+    }
+
     if (change) {
-        console->Debug("Change!\n");
         this->SendPresence();
     }
 

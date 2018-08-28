@@ -30,6 +30,8 @@ void Portal2::LoadOffsets()
     AutoCompletionFunc = 66; // listdemo_CompletionFunc
     SetSignonState = 15; // CClientState
     CL_IsRecordingMovie = 2; // endmovie
+    GetCurrentMap = 25; // CEngineTool
+    m_szLevelName = 36; // CEngineTool::GetCurrentMap
 
     // vstdlib.dll
 
@@ -56,6 +58,8 @@ void Portal2::LoadOffsets()
     AutoCompletionFunc = 37; // listdemo_CompletionFunc
     SetSignonState = 36; // CClientState
     CL_IsRecordingMovie = 8; // endmovie
+    GetCurrentMap = 26; // CEngineTool
+    m_szLevelName = 72; // CEngineTool::GetCurrentMap
 
     // libvstdlib.so
 

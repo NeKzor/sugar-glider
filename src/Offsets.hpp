@@ -26,6 +26,9 @@ extern int Disconnect;
 // CDemoPlayer
 extern int IsPlayingBack;
 
+// CEngineTool
+extern int GetCurrentMap;
+
 // Others
 extern int GetClientStateFunction;
 extern int cl;
@@ -34,4 +37,5 @@ extern int AutoCompletionFunc;
 extern int HostState_OnClientConnected;
 extern int hoststate;
 extern int CL_IsRecordingMovie;
+extern int m_szLevelName;
 }

@@ -1,6 +1,8 @@
 #pragma once
 #include "Portal2Boards/Portal2Boards.hpp"
 
+#include "SDK.hpp"
+
 #define P2_APP_ID "478256997314330634"
 #define AT_APP_ID "482831216165257216"
 #define PS_APP_ID "482833874406211584"
@@ -17,12 +19,6 @@
 #define PUZZLEMAKER_STRING "puzzlemaker/"
 #endif
 
-#define DETECT_CHANGE_S(prevState, curState)             \
-    if (std::strcmp(prevState, curState) != 0) {         \
-        std::strcpy(prevState, curState);                \
-        console->Debug(#prevState " = %s\n", prevState); \
-        change = true;                                   \
-    }
 #define DETECT_CHANGE_B(prevState, curState)             \
     if (prevState != curState) {                         \
         prevState = curState;                            \
@@ -70,6 +66,7 @@ private:
     char details[256];
     char state[256];
     time_t timestamp;
+    HOSTSTATES prevState;
 
 public:
     Discord();

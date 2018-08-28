@@ -53,7 +53,7 @@ public:
     template <typename... T>
     void Debug(const char* fmt, T... args)
     {
-        if (developer.GetBool()) {
+        if (developer.GetInt() == 3) {
             this->ColorMsg(SGP_PRINT_COLOR, fmt, args...);
         }
     }
