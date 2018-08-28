@@ -173,7 +173,28 @@ std::vector<Map> Map::aperturetag = std::vector<Map>{
     Map{ "gg_trailer_map", "trailer_map", MapType::SinglePlayer, 0, 0, -1 }
 };
 std::vector<Map> Map::portal_stories = std::vector<Map>{
-    Map{ "gg_intro_wakeup", "intro_wakeup", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a1_tramride", "tramride", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a1_mel_intro", "mel_intro", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a1_lift", "lift", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a1_garden", "garden", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a2_garden_de", "garden_de", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a2_underbounce", "underbounce", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a2_once_upon", "once_upon", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a2_past_power", "past_power", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a2_ramp", "ramp", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a2_firestorm", "firestorm", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a3_junkyard", "junkyard", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a3_concepts", "concepts", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a3_paint_fling", "paint_fling", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a3_faith_plate", "faith_plate", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a3_transition", "transition", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a4_overgrown", "overgrown", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a4_tb_over_goo", "tb_over_goo", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a4_two_of_a_kind", "two_of_a_kind", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a4_destroyed", "destroyed", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a4_factory", "factory", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a4_core_access", "core_access", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "st_a4_finale", "finale", MapType::SinglePlayer, 0, 0, -1 },
     Map{ "sp_a1_tramride", "tramride", MapType::SinglePlayer, 0, 0, -1 },
     Map{ "sp_a1_mel_intro", "mel_intro", MapType::SinglePlayer, 0, 0, -1 },
     Map{ "sp_a1_lift", "lift", MapType::SinglePlayer, 0, 0, -1 },
@@ -195,6 +216,7 @@ std::vector<Map> Map::portal_stories = std::vector<Map>{
     Map{ "sp_a4_destroyed", "destroyed", MapType::SinglePlayer, 0, 0, -1 },
     Map{ "sp_a4_factory", "factory", MapType::SinglePlayer, 0, 0, -1 },
     Map{ "sp_a4_core_access", "core_access", MapType::SinglePlayer, 0, 0, -1 },
-    Map{ "sp_a4_finale", "finale", MapType::SinglePlayer, 0, 0, -1 }
+    Map{ "sp_a4_finale", "finale", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "sp_a5_credits", "credits", MapType::SinglePlayer, 0, 0, -1 }
 };
 }
