@@ -1,7 +1,15 @@
 #!/bin/bash
-for file in assets/*.jpg; do
-  [ -e "$file" ] || continue
-  mv "$file" "${file%????????}.jpg"
-  echo "$file -> ${file%????????}.jpg"
-done
-
+if [ "$1" = "--mel" ]; then
+    for file in assets/*.jpg; do
+        [ -e "$file" ] || continue
+        cp "$file" "assets/st_$(basename $file)"
+        rename 's/st_sp/st/' assets/*.jpg
+        echo "$file"
+    done
+else
+    for file in assets/*.jpg; do
+        [ -e "$file" ] || continue
+        mv "$file" "${file%????????}.jpg"
+        echo "$file -> ${file%????????}.jpg"
+    done
+fi
