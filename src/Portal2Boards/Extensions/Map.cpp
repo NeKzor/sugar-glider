@@ -170,7 +170,8 @@ std::vector<Map> Map::aperturetag = std::vector<Map>{
     Map{ "gg_stage_pickbounce", "stage_pickbounce", MapType::SinglePlayer, 0, 0, -1 },
     Map{ "gg_stage_theend", "stage_theend", MapType::SinglePlayer, 0, 0, -1 },
     Map{ "gg_tag_remix", "tag_remix", MapType::SinglePlayer, 0, 0, -1 },
-    Map{ "gg_trailer_map", "trailer_map", MapType::SinglePlayer, 0, 0, -1 }
+    Map{ "gg_trailer_map", "trailer_map", MapType::SinglePlayer, 0, 0, -1 },
+    Map{ "gg_credit_video", "credit_video", MapType::SinglePlayer, 0, 0, -1 }
 };
 std::vector<Map> Map::portal_stories = std::vector<Map>{
     Map{ "st_a1_tramride", "tramride", MapType::SinglePlayer, 0, 0, -1 },
