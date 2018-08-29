@@ -3,7 +3,7 @@
 
 **sugar-glider** is a Source Engine plugin for Portal 2 which connects to a Discord Rich Presence Client application.
 
-[![screenie](doc/screenie.png)](https://discordapp.com/developers/docs/rich-presence/how-to)
+[![screenie](doc/sugar-glider.gif)](https://discordapp.com/rich-presence)
 
 ## Supported Systems
 
